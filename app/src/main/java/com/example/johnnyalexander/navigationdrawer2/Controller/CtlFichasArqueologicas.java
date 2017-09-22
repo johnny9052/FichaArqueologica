@@ -22,16 +22,13 @@ import java.util.List;
 
 public class CtlFichasArqueologicas {
 
-    public static boolean status = false;
+    /*Variable que indica si la informacion basica ya ha sido registrada*/
+    public static boolean infoBasicaRegistrada = false;
 
     /*Esto lo voy a utilizar cuando necesite listarlas*/
     public ArrayList<ClsFichaArqueologica> fichas = new ArrayList<ClsFichaArqueologica>();
 
     /*Ficha para controlar la ficha del proceso de registro o manipulacion*/
     static public ClsFichaArqueologica fichaTemporal = new ClsFichaArqueologica();
-
-
-
-
 
 }

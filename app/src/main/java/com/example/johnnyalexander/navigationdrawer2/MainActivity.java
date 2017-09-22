@@ -19,25 +19,15 @@ import com.example.johnnyalexander.navigationdrawer2.View.Fragments.Informacion_
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+
+    FragmentManager fragmentManager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        /*CONTROL DEL ACCION FLOTANTE, EL CUAL SE ENCUENTRA EN EL LAYOUT APP_BAR_MAIN*/
-        /*
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-        */
-
 
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -50,8 +40,41 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
 
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.masterLayout, new Lista_Fichas()).commit();
+
+        Bundle bundle = getIntent().getExtras();
+        String fragmentDefecto = "";
+
+        try {
+            if (bundle != null) {
+                fragmentDefecto = bundle.getString("fragment");
+            }
+        } catch (Exception e) {
+
+        }
+
+        /*Formulario que se carga por defecto*/
+        fragmentManager = getSupportFragmentManager();
+
+        cargarFormularioPorDefecto(fragmentDefecto);
+
+    }
+
+
+    public void cargarFormularioPorDefecto(String fragment) {
+        try{
+            switch (fragment) {
+                case "registroFicha":
+                    fragmentManager.beginTransaction().replace(R.id.masterLayout, new Ficha_Registro()).commit();
+                    break;
+                default:
+                    fragmentManager.beginTransaction().replace(R.id.masterLayout, new Lista_Fichas()).commit();
+                    break;
+            }
+        }catch (Exception e){
+            fragmentManager.beginTransaction().replace(R.id.masterLayout, new Lista_Fichas()).commit();
+        }
+
+
     }
 
     @Override
@@ -106,9 +129,6 @@ public class MainActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
-
-
-
 
 
 }

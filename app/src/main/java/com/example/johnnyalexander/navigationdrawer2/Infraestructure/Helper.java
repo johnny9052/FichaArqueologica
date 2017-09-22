@@ -224,7 +224,7 @@ public class Helper extends Data {
     public boolean ArchivoTextoCrear(String contenido, String nombreArchivo, Context context, String formato) throws IOException {
 
         File path = context.getExternalFilesDir(null);
-        File file = new File(path, nombreArchivo + formato);
+        File file = new File(path, nombreArchivo +"."+formato);
 
         FileOutputStream stream = new FileOutputStream(file);
 
@@ -252,10 +252,10 @@ public class Helper extends Data {
      * @return Texto que contiene el archivo
      * @throws IOException
      */
-    public String ArchivoTextoCargarContenidoPorNombre(String nombreArchivo, String formato, Context context) throws IOException {
+    public String archivoTextoCargarContenidoPorNombre(String nombreArchivo, String formato, Context context) throws IOException {
 
         File path = context.getExternalFilesDir(null);
-        File file = new File(path, nombreArchivo + formato);
+        File file = new File(path, nombreArchivo +"."+formato);
 
         int length = (int) file.length();
 
@@ -282,7 +282,7 @@ public class Helper extends Data {
      * @return Texto contenido en el archivo
      * @throws IOException
      */
-    public String ArchivoTextoCargarContenido(File file, Context context) throws IOException {
+    public String archivoTextoCargarContenido(File file, Context context) throws IOException {
         int length = (int) file.length();
         byte[] bytes = new byte[length];
         FileInputStream in = new FileInputStream(file);

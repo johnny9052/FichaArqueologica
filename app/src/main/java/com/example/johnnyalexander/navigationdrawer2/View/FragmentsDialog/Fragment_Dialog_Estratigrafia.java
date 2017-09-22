@@ -107,7 +107,7 @@ public class Fragment_Dialog_Estratigrafia extends DialogFragment {
 
     public void guardarEstratigrafia(View view) throws IOException {
 
-        if (ficha.status) {
+        if (ficha.infoBasicaRegistrada) {
             if (helper.editTextValidarObligatorioMensaje(txtNumeroHorizonteEstratigrafia)) {
 
 
@@ -127,7 +127,7 @@ public class Fragment_Dialog_Estratigrafia extends DialogFragment {
 
                 String nombreArchivo = helper.nombreArchivo(ficha.fichaTemporal);
 
-                if (helper.ArchivoTextoCrear(json, nombreArchivo, getContext(), ".json")) {
+                if (helper.ArchivoTextoCrear(json, nombreArchivo, getContext(), "json")) {
                     getDialog().dismiss();
                     helper.mostrarMensaje("Almacenado correctamente", getContext());
                 } else {

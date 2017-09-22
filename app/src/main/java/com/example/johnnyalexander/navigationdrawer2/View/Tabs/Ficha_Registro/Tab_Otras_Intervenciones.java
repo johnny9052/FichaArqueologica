@@ -47,17 +47,15 @@ public class Tab_Otras_Intervenciones extends Fragment {
     Button btnTomarFotografia1, btnTomarFotografia2;
 
 
-    RadioGroup rdgApliacionOtrasIntervenciones,rdgCorteAreaOtrasIntervenciones,rdgTrincheraOtrasIntervenciones;
+    RadioGroup rdgApliacionOtrasIntervenciones, rdgCorteAreaOtrasIntervenciones, rdgTrincheraOtrasIntervenciones;
 
-
+    ImageView imgView1, imgView2;
 
     FloatingActionButton btnfGuardarOtrasIntervenciones;
     /*END Elementos GUI*/
 
 
-    ImageView imgView1, imgView2;
     static final int REQUEST_IMAGE_CAPTURE = 1;
-
     int numberPhoto;
 
 
@@ -70,6 +68,58 @@ public class Tab_Otras_Intervenciones extends Fragment {
         helper = new Helper();
         ficha = new CtlFichasArqueologicas();
 
+        configuracionGUI(view);
+        configuracionListeners();
+
+        verificarDatos();
+
+        return view;
+    }
+
+
+    public void verificarDatos() {
+        if (ficha.fichaTemporal.basica.getCorte() != "") {
+            helper.mostrarMensaje("debemos cargar datos", getContext());
+        }
+    }
+
+
+    public void configuracionListeners() {
+
+        helper.editTextToCalendar(txtFechaInicioOtrasIntervenciones, getActivity());
+        helper.editTextToCalendar(txtFechaFinOtrasIntervenciones, getActivity());
+
+         /*Actions - Listener*/
+        btnTomarFotografia1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                tomarFoto(1);
+            }
+        });
+
+
+        btnTomarFotografia2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                tomarFoto(2);
+            }
+        });
+
+
+        btnfGuardarOtrasIntervenciones.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                try {
+                    guardarOtrasIntervenciones(view);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        /*End Actions - Listeners*/
+    }
+
+    public void configuracionGUI(View view) {
         /*Referencias GUI*/
         txtNumeroAmpliacionesOtrasIntervenciones = (EditText) view.findViewById(R.id.txtNumeroAmpliacionesOtrasIntervenciones);
         txtDescripcionGeneralAmpliacionesOtrasIntervenciones = (EditText) view.findViewById(R.id.txtDescripcionGeneralAmpliacionesOtrasIntervenciones);
@@ -111,85 +161,45 @@ public class Tab_Otras_Intervenciones extends Fragment {
         imgView1 = (ImageView) view.findViewById(R.id.imgView1);
         imgView2 = (ImageView) view.findViewById(R.id.imgView2);
         /*END Referencias GUI*/
-
-        configuracionListeners();
-        configuracionGUI();
-
-        return view;
-    }
-
-
-    public void configuracionListeners() {
-
-        //helper.editTextToCalendar(txtFechaInicioOtrasIntervenciones, getActivity());
-        //helper.editTextToCalendar(txtFechaFinOtrasIntervenciones, getActivity());
-
-         /*Actions - Listener*/
-        btnTomarFotografia1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                tomarFoto(1);
-            }
-        });
-
-
-        btnTomarFotografia2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                tomarFoto(2);
-            }
-        });
-
-
-        btnfGuardarOtrasIntervenciones.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                try {
-                    guardarOtrasIntervenciones(view);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-        /*End Actions - Listeners*/
-    }
-
-    public void configuracionGUI() {
-
     }
 
 
     public void guardarOtrasIntervenciones(View view) throws IOException {
 
-        ArrayList<String> fotografias = new ArrayList<String>();
+        if (ficha.infoBasicaRegistrada) {
 
-        //ficha.fichaTemporal.otras.setFechaInicio(txtFechaInicioOtrasIntervenciones.getText().toString());
-        //ficha.fichaTemporal.otras.setFechaFin(txtFechaFinOtrasIntervenciones.getText().toString());
-        ficha.fichaTemporal.otras.setSuperior(chkSuperiorOtrasIntervenciones.isChecked());
-        ficha.fichaTemporal.otras.setInferior(chkInferiorOtrasIntervenciones.isChecked());
-        ficha.fichaTemporal.otras.setDerecha(chkDerechaOtrasIntervenciones.isChecked());
-        ficha.fichaTemporal.otras.setIzquierda(chkIzquierdaOtrasIntervenciones.isChecked());
-        ficha.fichaTemporal.otras.setAmpliacionesDescripcionGeneral(txtDescripcionGeneralAmpliacionesOtrasIntervenciones.getText().toString());
-        ficha.fichaTemporal.otras.setCorteAreaNomenclatura(txtCorteAreaNomenclaturaOtrasIntervenciones.getText().toString());
-        ficha.fichaTemporal.otras.setCorteAreaDescripcionGeneral(txtCorteAreaDescripcionOtrasIntervenciones.getText().toString());
-        ficha.fichaTemporal.otras.setTrincheraNomenclatura(txtTrincheraNomenclaturaOtrasIntervenciones.getText().toString());
-        ficha.fichaTemporal.otras.setTrincheraDescripcionGeneral(txtTrincheraDescripcionGeneralOtrasIntervenciones.getText().toString());
-        ficha.fichaTemporal.otras.setNumeroApliaciones((helper.editTextValidarObligatorio(txtNumeroAmpliacionesOtrasIntervenciones)) ? Integer.parseInt(txtNumeroAmpliacionesOtrasIntervenciones.getText().toString()) : -1);
-        ficha.fichaTemporal.otras.setTotalFotografias((helper.editTextValidarObligatorio(txtTotalFotografiasOtrasIntervenciones)) ? Integer.parseInt(txtTotalFotografiasOtrasIntervenciones.getText().toString()) : -1);
-        ficha.fichaTemporal.otras.setTotalDibujos((helper.editTextValidarObligatorio(txtTotalDibujosOtrasIntervenciones)) ? Integer.parseInt(txtTotalDibujosOtrasIntervenciones.getText().toString()) : -1);
-        ficha.fichaTemporal.otras.setOtros((helper.editTextValidarObligatorio(txtTotalOtrosOtrasIntervenciones)) ? Integer.parseInt(txtTotalOtrosOtrasIntervenciones.getText().toString()) : -1);
+            ArrayList<String> fotografias = new ArrayList<String>();
 
-        ficha.fichaTemporal.otras.setAmpliaciones(helper.radioValorSeleccionado(rdgApliacionOtrasIntervenciones));
-        ficha.fichaTemporal.otras.setCorteArea(helper.radioValorSeleccionado(rdgCorteAreaOtrasIntervenciones));
-        ficha.fichaTemporal.otras.setTrinchera(helper.radioValorSeleccionado(rdgTrincheraOtrasIntervenciones));
+            ficha.fichaTemporal.otras.setFechaInicio(txtFechaInicioOtrasIntervenciones.getText().toString());
+            ficha.fichaTemporal.otras.setFechaFin(txtFechaFinOtrasIntervenciones.getText().toString());
+            ficha.fichaTemporal.otras.setSuperior(chkSuperiorOtrasIntervenciones.isChecked());
+            ficha.fichaTemporal.otras.setInferior(chkInferiorOtrasIntervenciones.isChecked());
+            ficha.fichaTemporal.otras.setDerecha(chkDerechaOtrasIntervenciones.isChecked());
+            ficha.fichaTemporal.otras.setIzquierda(chkIzquierdaOtrasIntervenciones.isChecked());
+            ficha.fichaTemporal.otras.setAmpliacionesDescripcionGeneral(txtDescripcionGeneralAmpliacionesOtrasIntervenciones.getText().toString());
+            ficha.fichaTemporal.otras.setCorteAreaNomenclatura(txtCorteAreaNomenclaturaOtrasIntervenciones.getText().toString());
+            ficha.fichaTemporal.otras.setCorteAreaDescripcionGeneral(txtCorteAreaDescripcionOtrasIntervenciones.getText().toString());
+            ficha.fichaTemporal.otras.setTrincheraNomenclatura(txtTrincheraNomenclaturaOtrasIntervenciones.getText().toString());
+            ficha.fichaTemporal.otras.setTrincheraDescripcionGeneral(txtTrincheraDescripcionGeneralOtrasIntervenciones.getText().toString());
+            ficha.fichaTemporal.otras.setNumeroApliaciones(helper.editTextValidarNumeroEntero(txtNumeroAmpliacionesOtrasIntervenciones));
+            ficha.fichaTemporal.otras.setTotalFotografias(helper.editTextValidarNumeroEntero(txtTotalFotografiasOtrasIntervenciones));
+            ficha.fichaTemporal.otras.setTotalDibujos(helper.editTextValidarNumeroEntero(txtTotalDibujosOtrasIntervenciones));
+            ficha.fichaTemporal.otras.setOtros(helper.editTextValidarNumeroEntero(txtTotalOtrosOtrasIntervenciones));
 
-        String json = helper.JSON_ObjetoToJSON(ficha.fichaTemporal);
-        String nombreArchivo = ficha.fichaTemporal.basica.getNumeroSitio() + "-" + ficha.fichaTemporal.basica.getCorte();
+            ficha.fichaTemporal.otras.setAmpliaciones(helper.radioValorSeleccionado(rdgApliacionOtrasIntervenciones));
+            ficha.fichaTemporal.otras.setCorteArea(helper.radioValorSeleccionado(rdgCorteAreaOtrasIntervenciones));
+            ficha.fichaTemporal.otras.setTrinchera(helper.radioValorSeleccionado(rdgTrincheraOtrasIntervenciones));
 
-        if (helper.ArchivoTextoCrear(json, nombreArchivo, getContext(), ".json")) {
-            helper.mostrarMensajeInferiorPantalla("Almacenado correctamente", view);
+            String json = helper.JSON_ObjetoToJSON(ficha.fichaTemporal);
+            String nombreArchivo = helper.nombreArchivo(ficha.fichaTemporal);
+
+            if (helper.ArchivoTextoCrear(json, nombreArchivo, getContext(), "json")) {
+                helper.mostrarMensajeInferiorPantalla("Almacenado correctamente", view);
+            } else {
+                helper.mostrarMensajeInferiorPantalla("Error al almacenar", view);
+            }
         } else {
-            helper.mostrarMensajeInferiorPantalla("Error al almacenar", view);
+            helper.mostrarMensaje("Primero debe almacenar la informacion basica", getContext());
         }
 
 

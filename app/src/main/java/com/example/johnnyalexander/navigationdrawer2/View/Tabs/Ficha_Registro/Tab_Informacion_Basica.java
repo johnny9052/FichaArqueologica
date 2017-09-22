@@ -61,6 +61,9 @@ public class Tab_Informacion_Basica extends Fragment {
         configuracionGUI(view);
         configuracionListeners();
         verificarDatos();
+
+
+
         return view;
     }
 
@@ -70,11 +73,20 @@ public class Tab_Informacion_Basica extends Fragment {
      */
     public void verificarDatos() {
 
+        /*Se verifica el nombre registrado en la aplicacion para ponerlo como profesional por
+        * defecto*/
         persistencia = getActivity().getSharedPreferences("ClsUsuario", Context.MODE_PRIVATE);
 
         if (persistencia.getString("nombres", null) != null) {
             txtProfesionalInfoBasica.setText(persistencia.getString("nombres", "") + " " +
                     persistencia.getString("apellidos", ""));
+        }
+
+
+        /*Se valida si existe informacion previamente cargada para realizar una edicion de datos,
+        * cargando en los datos del formulario la informacion*/
+        if(ficha.fichaTemporal.basica.getCorte()!="" && ficha.fichaTemporal.basica.getCorte()!=null){
+            helper.mostrarMensaje("debemos cargar datos",getContext());
         }
 
     }
@@ -212,10 +224,10 @@ public class Tab_Informacion_Basica extends Fragment {
 
             String nombreArchivo = helper.nombreArchivo(ficha.fichaTemporal);
 
-            if (helper.ArchivoTextoCrear(json, nombreArchivo, getContext(), ".json")) {
+            if (helper.ArchivoTextoCrear(json, nombreArchivo, getContext(), "json")) {
                 helper.mostrarMensajeInferiorPantalla("Almacenado correctamente", view);
                 /*Indicamos que ya se pueden guardar las otras pestañas*/
-                ficha.status=true;
+                ficha.infoBasicaRegistrada =true;
             } else {
                 helper.mostrarMensajeInferiorPantalla("Error al almacenar", view);
             }

@@ -101,7 +101,7 @@ public class Fragment_Dialog_Material_Recuperado extends DialogFragment {
 
     public void guardarMaterialRecuperado() throws IOException {
 
-        if (ficha.status) {
+        if (ficha.infoBasicaRegistrada) {
             if (helper.spinnerValidarObligatorioMensaje(spnNivelMaterialRecuperado)) {
 
                 String nivel = spnNivelMaterialRecuperado.getSelectedItem().toString();
@@ -124,7 +124,7 @@ public class Fragment_Dialog_Material_Recuperado extends DialogFragment {
 
                 String nombreArchivo = helper.nombreArchivo(ficha.fichaTemporal);
 
-                if (helper.ArchivoTextoCrear(json, nombreArchivo, getContext(), ".json")) {
+                if (helper.ArchivoTextoCrear(json, nombreArchivo, getContext(), "json")) {
                     getDialog().dismiss();
                     helper.mostrarMensaje("Almacenado correctamente", getContext());
                 } else {
