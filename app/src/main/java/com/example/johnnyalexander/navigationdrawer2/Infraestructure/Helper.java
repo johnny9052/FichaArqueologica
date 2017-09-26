@@ -52,8 +52,47 @@ public class Helper extends Data {
 
 
     /*************************/
+    /****FUNCIONES DATOS******/
+    /*************************/
+
+    public String numeroValidarCargaObligatorio(int num) {
+        if (num == -1) {
+            return "";
+        } else {
+            return num + "";
+        }
+    }
+
+
+    public String numeroValidarCargaObligatorio(double num) {
+        if (num == -1) {
+            return "";
+        } else {
+            return num + "";
+        }
+    }
+
+    /*************************/
+    /*END FUNCIONES DATOS*****/
+    /*************************/
+
+
+    /*************************/
     /******FUNCIONES GUI******/
     /*************************/
+
+
+    public int spinnerObtenerPosicionValor(Spinner spinner, String myString) {
+        int index = 0;
+
+        for (int i = 0; i < spinner.getCount(); i++) {
+            if (spinner.getItemAtPosition(i).toString().equalsIgnoreCase(myString)) {
+                index = i;
+                break;
+            }
+        }
+        return index;
+    }
 
 
     public boolean editTextValidarObligatorioMensaje(EditText editText) {
@@ -171,6 +210,24 @@ public class Helper extends Data {
     }
 
 
+    public int radioGroupIndiceRadioSeleccionado(RadioGroup group, String value) {
+        String text;
+        int count = group.getChildCount();
+        for (int i = 0; i < count; i++) {
+            View o = group.getChildAt(i);
+            if (o instanceof RadioButton) {
+                RadioButton radioButton = (RadioButton) group.findViewById(o.getId());
+                text = (String) radioButton.getText();
+                if (text.equals(value)) {
+                    return o.getId();
+                }
+            }
+        }
+
+        return -1;
+    }
+
+
     public int editTextValidarNumeroEntero(EditText editText) {
         return editTextValidarObligatorio(editText) ? Integer.parseInt(editText.getText().toString()) : -1;
     }
@@ -224,7 +281,7 @@ public class Helper extends Data {
     public boolean ArchivoTextoCrear(String contenido, String nombreArchivo, Context context, String formato) throws IOException {
 
         File path = context.getExternalFilesDir(null);
-        File file = new File(path, nombreArchivo +"."+formato);
+        File file = new File(path, nombreArchivo + "." + formato);
 
         FileOutputStream stream = new FileOutputStream(file);
 
@@ -255,7 +312,7 @@ public class Helper extends Data {
     public String archivoTextoCargarContenidoPorNombre(String nombreArchivo, String formato, Context context) throws IOException {
 
         File path = context.getExternalFilesDir(null);
-        File file = new File(path, nombreArchivo +"."+formato);
+        File file = new File(path, nombreArchivo + "." + formato);
 
         int length = (int) file.length();
 

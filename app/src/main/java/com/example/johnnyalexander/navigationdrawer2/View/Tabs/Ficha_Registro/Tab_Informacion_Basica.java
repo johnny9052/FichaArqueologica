@@ -241,42 +241,44 @@ public class Tab_Informacion_Basica extends Fragment {
     }
 
 
-    public void cargarDatos(){
+    public void cargarDatos() {
+
         helper.mostrarMensaje("Cargar datos info basica", getContext());
 
         txtProfesionalInfoBasica.setText(ficha.fichaTemporal.basica.getNombreProfesional());
-        txtNumeroSitioInfoBasica.setText(ficha.fichaTemporal.basica.getNumeroSitio()+"");
+        txtNumeroSitioInfoBasica.setText(helper.numeroValidarCargaObligatorio(ficha.fichaTemporal.basica.getNumeroSitio()));
         txtCorteInfoBasica.setText(ficha.fichaTemporal.basica.getCorte());
+        txtPredioInfoBasica.setText(ficha.fichaTemporal.basica.getPredio());
+        txtVeredaInfoBasica.setText(ficha.fichaTemporal.basica.getVereda());
+        txtPKInfoBasica.setText(ficha.fichaTemporal.basica.getPk());
+        txtFuenteHidricaInfoBasica.setText(ficha.fichaTemporal.basica.getFuenteHidrica());
+        txtNivelExcavacionInfoBasica.setText(helper.numeroValidarCargaObligatorio(ficha.fichaTemporal.basica.getNivelesExcavacion()));
+        txtDescripcionSitioInfoBasica.setText(ficha.fichaTemporal.basica.getDescripcionGeneralSitio());
+        txtWPInfoBasica.setText(ficha.fichaTemporal.basica.getWp());
+        txtCoordenadaX.setText(helper.numeroValidarCargaObligatorio(ficha.fichaTemporal.basica.getCoordenaraX()));
+        txtCoordenadaY.setText(helper.numeroValidarCargaObligatorio(ficha.fichaTemporal.basica.getGetCoordenaraY()));
+        txtProfundidadInic1InfoBasica.setText(helper.numeroValidarCargaObligatorio(ficha.fichaTemporal.basica.getProfundidad1()));
+        txtProfundidadInic2InfoBasica.setText(helper.numeroValidarCargaObligatorio(ficha.fichaTemporal.basica.getProfundidad2()));
+        txtProfundidadInic3InfoBasica.setText(helper.numeroValidarCargaObligatorio(ficha.fichaTemporal.basica.getProfundidad3()));
+        txtProfundidadInic4InfoBasica.setText(helper.numeroValidarCargaObligatorio(ficha.fichaTemporal.basica.getProfundidad4()));
 
-        /*
-        ficha.fichaTemporal.basica.setPredio(txtPredioInfoBasica.getText().toString());
-        ficha.fichaTemporal.basica.setVereda(txtVeredaInfoBasica.getText().toString());
-        ficha.fichaTemporal.basica.setMunicipio(spnMunicipios.getSelectedItem().toString());
-        ficha.fichaTemporal.basica.setPk(txtPKInfoBasica.getText().toString());
-        ficha.fichaTemporal.basica.setFuenteHidrica(txtFuenteHidricaInfoBasica.getText().toString());
-        ficha.fichaTemporal.basica.setNivelesExcavacion(helper.editTextValidarNumeroEntero(txtNivelExcavacionInfoBasica));
-        ficha.fichaTemporal.basica.setElementoPaisaje(spnPaisaje.getSelectedItem().toString());
-        ficha.fichaTemporal.basica.setMicrotopografia(spnMicrotopografia.getSelectedItem().toString());
-        ficha.fichaTemporal.basica.setCoverturaVegetal(spnCoberturaVegetal.getSelectedItem().toString());
-        ficha.fichaTemporal.basica.setDescripcionGeneralSitio(txtDescripcionSitioInfoBasica.getText().toString());
-        ficha.fichaTemporal.basica.setAgriculturaFactorAlteracion(chkAgriculturaInfoBasica.isChecked());
-        ficha.fichaTemporal.basica.setGanaderiaFactorAlteracion(chkGanaderiaInfoBasica.isChecked());
-        ficha.fichaTemporal.basica.setErocionFactorAlteracion(chkErosionInfoBasica.isChecked());
-        ficha.fichaTemporal.basica.setInundacionFactorAlteracion(chkInundacionInfoBasica.isChecked());
-        ficha.fichaTemporal.basica.setGuaqueriaFactorAlteracion(chkGuaqueriaInfoBasica.isChecked());
-        ficha.fichaTemporal.basica.setObraCivilFactorAlteracion(chkObraCivilInfoBasica.isChecked());
-        ficha.fichaTemporal.basica.setMovimientosMasivosFactorAlteracion(chkMovimientosMasivosInfoBasica.isChecked());
-        ficha.fichaTemporal.basica.setOtroFactorAlteracion(chkOtroInfoBasica.isChecked());
-        ficha.fichaTemporal.basica.setGradoConservacion(spnConservacion.getSelectedItem().toString());
-        ficha.fichaTemporal.basica.setWp(txtWPInfoBasica.getText().toString());
-        ficha.fichaTemporal.basica.setCoordenaraX(helper.editTextValidarNumeroReal(txtCoordenadaX));
-        ficha.fichaTemporal.basica.setGetCoordenaraY(helper.editTextValidarNumeroReal(txtCoordenadaY));
-        ficha.fichaTemporal.basica.setResultado(spnResultado.getSelectedItem().toString());
-        ficha.fichaTemporal.basica.setProfundidad1(helper.editTextValidarNumeroReal(txtProfundidadInic1InfoBasica));
-        ficha.fichaTemporal.basica.setProfundidad2(helper.editTextValidarNumeroReal(txtProfundidadInic2InfoBasica));
-        ficha.fichaTemporal.basica.setProfundidad3(helper.editTextValidarNumeroReal(txtProfundidadInic3InfoBasica));
-        ficha.fichaTemporal.basica.setProfundidad4(helper.editTextValidarNumeroReal(txtProfundidadInic4InfoBasica));
-        */
+        spnMunicipios.setSelection(helper.spinnerObtenerPosicionValor(spnMunicipios, ficha.fichaTemporal.basica.getMunicipio()));
+
+        spnResultado.setSelection(helper.spinnerObtenerPosicionValor(spnResultado, ficha.fichaTemporal.basica.getResultado()));
+        spnCoberturaVegetal.setSelection(helper.spinnerObtenerPosicionValor(spnCoberturaVegetal, ficha.fichaTemporal.basica.getCoverturaVegetal()));
+        spnMicrotopografia.setSelection(helper.spinnerObtenerPosicionValor(spnMicrotopografia, ficha.fichaTemporal.basica.getMicrotopografia()));
+        spnPaisaje.setSelection(helper.spinnerObtenerPosicionValor(spnPaisaje, ficha.fichaTemporal.basica.getElementoPaisaje()));
+        spnConservacion.setSelection(helper.spinnerObtenerPosicionValor(spnConservacion, ficha.fichaTemporal.basica.getGradoConservacion()));
+
+        chkAgriculturaInfoBasica.setChecked(ficha.fichaTemporal.basica.isAgriculturaFactorAlteracion());
+        chkGanaderiaInfoBasica.setChecked(ficha.fichaTemporal.basica.isGanaderiaFactorAlteracion());
+        chkErosionInfoBasica.setChecked(ficha.fichaTemporal.basica.isErocionFactorAlteracion());
+        chkInundacionInfoBasica.setChecked(ficha.fichaTemporal.basica.isInundacionFactorAlteracion());
+        chkGuaqueriaInfoBasica.setChecked(ficha.fichaTemporal.basica.isGuaqueriaFactorAlteracion());
+        chkObraCivilInfoBasica.setChecked(ficha.fichaTemporal.basica.isObraCivilFactorAlteracion());
+        chkMovimientosMasivosInfoBasica.setChecked(ficha.fichaTemporal.basica.isMovimientosMasivosFactorAlteracion());
+        chkOtroInfoBasica.setChecked(ficha.fichaTemporal.basica.isOtroFactorAlteracion());
+
     }
 
 

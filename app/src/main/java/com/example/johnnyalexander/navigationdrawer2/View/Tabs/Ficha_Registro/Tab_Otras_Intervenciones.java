@@ -236,36 +236,43 @@ public class Tab_Otras_Intervenciones extends Fragment {
     }
 
 
-    public void cargarDatos(){
+    public void cargarDatos() {
         helper.mostrarMensaje("debemos cargar datos de interveciones", getContext());
 
 
-        txtFechaInicioOtrasIntervenciones.setText(ficha.fichaTemporal.otras.getFechaInicio());
-        txtNumeroAmpliacionesOtrasIntervenciones.setText(ficha.fichaTemporal.otras.getNumeroApliaciones()+"");
-
-
         /*ArrayList<String> fotografias = new ArrayList<String>();
-
-
-        ficha.fichaTemporal.otras.setFechaFin(txtFechaFinOtrasIntervenciones.getText().toString());
-        ficha.fichaTemporal.otras.setSuperior(chkSuperiorOtrasIntervenciones.isChecked());
-        ficha.fichaTemporal.otras.setInferior(chkInferiorOtrasIntervenciones.isChecked());
-        ficha.fichaTemporal.otras.setDerecha(chkDerechaOtrasIntervenciones.isChecked());
-        ficha.fichaTemporal.otras.setIzquierda(chkIzquierdaOtrasIntervenciones.isChecked());
-        ficha.fichaTemporal.otras.setAmpliacionesDescripcionGeneral(txtDescripcionGeneralAmpliacionesOtrasIntervenciones.getText().toString());
-        ficha.fichaTemporal.otras.setCorteAreaNomenclatura(txtCorteAreaNomenclaturaOtrasIntervenciones.getText().toString());
-        ficha.fichaTemporal.otras.setCorteAreaDescripcionGeneral(txtCorteAreaDescripcionOtrasIntervenciones.getText().toString());
-        ficha.fichaTemporal.otras.setTrincheraNomenclatura(txtTrincheraNomenclaturaOtrasIntervenciones.getText().toString());
-        ficha.fichaTemporal.otras.setTrincheraDescripcionGeneral(txtTrincheraDescripcionGeneralOtrasIntervenciones.getText().toString());
-
-        ficha.fichaTemporal.otras.setTotalFotografias(helper.editTextValidarNumeroEntero(txtTotalFotografiasOtrasIntervenciones));
-        ficha.fichaTemporal.otras.setTotalDibujos(helper.editTextValidarNumeroEntero(txtTotalDibujosOtrasIntervenciones));
-        ficha.fichaTemporal.otras.setOtros(helper.editTextValidarNumeroEntero(txtTotalOtrosOtrasIntervenciones));
-
-        ficha.fichaTemporal.otras.setAmpliaciones(helper.radioValorSeleccionado(rdgApliacionOtrasIntervenciones));
-        ficha.fichaTemporal.otras.setCorteArea(helper.radioValorSeleccionado(rdgCorteAreaOtrasIntervenciones));
-        ficha.fichaTemporal.otras.setTrinchera(helper.radioValorSeleccionado(rdgTrincheraOtrasIntervenciones));
         */
+
+        txtFechaInicioOtrasIntervenciones.setText(ficha.fichaTemporal.otras.getFechaInicio());
+        txtNumeroAmpliacionesOtrasIntervenciones.setText(helper.numeroValidarCargaObligatorio(ficha.fichaTemporal.otras.getNumeroApliaciones()));
+
+        txtFechaFinOtrasIntervenciones.setText(ficha.fichaTemporal.otras.getFechaFin());
+        txtDescripcionGeneralAmpliacionesOtrasIntervenciones.setText(ficha.fichaTemporal.otras.getAmpliacionesDescripcionGeneral());
+        txtCorteAreaNomenclaturaOtrasIntervenciones.setText(ficha.fichaTemporal.otras.getCorteAreaNomenclatura());
+        txtCorteAreaDescripcionOtrasIntervenciones.setText(ficha.fichaTemporal.otras.getCorteAreaDescripcionGeneral());
+        txtTrincheraNomenclaturaOtrasIntervenciones.setText(ficha.fichaTemporal.otras.getTrincheraNomenclatura());
+        txtTrincheraDescripcionGeneralOtrasIntervenciones.setText(ficha.fichaTemporal.otras.getTrincheraDescripcionGeneral());
+
+        txtTotalFotografiasOtrasIntervenciones.setText(helper.numeroValidarCargaObligatorio(ficha.fichaTemporal.otras.getTotalFotografias()));
+        txtTotalDibujosOtrasIntervenciones.setText(helper.numeroValidarCargaObligatorio(ficha.fichaTemporal.otras.getTotalDibujos()));
+        txtTotalOtrosOtrasIntervenciones.setText(helper.numeroValidarCargaObligatorio(ficha.fichaTemporal.otras.getOtros()));
+
+        chkSuperiorOtrasIntervenciones.setChecked(ficha.fichaTemporal.otras.isSuperior());
+        chkInferiorOtrasIntervenciones.setChecked(ficha.fichaTemporal.otras.isInferior());
+        chkDerechaOtrasIntervenciones.setChecked(ficha.fichaTemporal.otras.isDerecha());
+        chkIzquierdaOtrasIntervenciones.setChecked(ficha.fichaTemporal.otras.isIzquierda());
+
+        if (helper.radioGroupIndiceRadioSeleccionado(rdgApliacionOtrasIntervenciones, ficha.fichaTemporal.otras.isAmpliaciones()) != -1) {
+            rdgApliacionOtrasIntervenciones.check(helper.radioGroupIndiceRadioSeleccionado(rdgApliacionOtrasIntervenciones, ficha.fichaTemporal.otras.isAmpliaciones()));
+        }
+
+        if (helper.radioGroupIndiceRadioSeleccionado(rdgCorteAreaOtrasIntervenciones, ficha.fichaTemporal.otras.isCorteArea()) != -1) {
+            rdgCorteAreaOtrasIntervenciones.check(helper.radioGroupIndiceRadioSeleccionado(rdgCorteAreaOtrasIntervenciones, ficha.fichaTemporal.otras.isCorteArea()));
+        }
+
+        if (helper.radioGroupIndiceRadioSeleccionado(rdgTrincheraOtrasIntervenciones, ficha.fichaTemporal.otras.isTrinchera()) != -1) {
+            rdgTrincheraOtrasIntervenciones.check(helper.radioGroupIndiceRadioSeleccionado(rdgTrincheraOtrasIntervenciones, ficha.fichaTemporal.otras.isTrinchera()));
+        }
 
     }
 
