@@ -31,4 +31,10 @@ public class CtlFichasArqueologicas {
     /*Ficha para controlar la ficha del proceso de registro o manipulacion*/
     static public ClsFichaArqueologica fichaTemporal = new ClsFichaArqueologica();
 
+    public void resetControlador() {
+        infoBasicaRegistrada = false;
+        fichaTemporal = null;
+        fichaTemporal = new ClsFichaArqueologica();
+    }
+
 }

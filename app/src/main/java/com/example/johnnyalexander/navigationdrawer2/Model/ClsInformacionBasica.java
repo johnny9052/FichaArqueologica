@@ -8,7 +8,9 @@ public class ClsInformacionBasica {
 
     private String nombreProfesional;
     private int numeroSitio;
-    private String corte;
+    /*El corte debe ser inicializado para que nunca se pregunte por este dato obligatorio
+    * y este se encuentre nulo*/
+    private String corte="";
     private String predio;
     private String vereda;
     private String municipio;

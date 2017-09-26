@@ -91,35 +91,41 @@ public class Ficha_Registro extends Fragment {
                     /*Como se va a registrar uno nuevo, se debe hacer reset a las variables estaticas,
                     * en este caso el indicador de que ya se registro la infobasica y la clase
                     * temporar que contendra todo el registo*/
-                    ficha.infoBasicaRegistrada = false;
-                    ficha.fichaTemporal = null;
-                    helper.mostrarMensaje("vamos a crear", getContext());
+                    prerararGestionDatosGuardar();
                 } else {
-                    /*Como se va a editar, se establece que ya se ha registrado informacion basica
-                    * para habilitar las demas pestañas, y se elimina el extra de editar, para que
-                    * cuando se le de crar uno nuevo no permanezca esa variable. Esto ocurre porque
-                    * todo se gestiona en el main.activity, y como se llama asi misma siempre se
-                    * tendria esa variable si no se elimina*/
-                    ficha.infoBasicaRegistrada = true;
-                    getActivity().getIntent().removeExtra("edicion");
-                    helper.mostrarMensaje("vamos a editar", getContext());
+                    prepararGestionDatosEditar();
                 }
             } else {
                 /*Como el bundle llego vacio es porque se va a registrar uno nuevo, se debe hacer
                   reset a las variables estaticas, en este caso el indicador de que ya se registro
                   la infobasica y la clase temporar que contendra todo el registo*/
-                ficha.infoBasicaRegistrada = false;
-                ficha.fichaTemporal = null;
-                helper.mostrarMensaje("vamos a crear", getContext());
+                prerararGestionDatosGuardar();
             }
         } catch (Exception e) {
             /*Despues de que uno ingrese el primer extra el bundle deja de estar vacio, por lo que
             * puede ocurrir de que cuando acceda al extra edicion este no exista y genere error */
+            prerararGestionDatosGuardar();
             helper.mostrarMensaje("No se encontraron datos", getContext());
         }
+    }
 
-        /*Se instancia el controlador*/
-        ficha.fichaTemporal = new ClsFichaArqueologica();
+
+    public void prerararGestionDatosGuardar() {
+        helper.mostrarMensaje("lo reseteee",getContext());
+        ficha.resetControlador();
+        helper.mostrarMensaje("vamos a crear ", getContext());
+    }
+
+
+    public void prepararGestionDatosEditar() {
+        /*Como se va a editar, se establece que ya se ha registrado informacion basica
+         * para habilitar las demas pestañas, y se elimina el extra de editar, para que
+         * cuando se le de crar uno nuevo no permanezca esa variable. Esto ocurre porque
+         * todo se gestiona en el main.activity, y como se llama asi misma siempre se
+         * tendria esa variable si no se elimina*/
+        ficha.infoBasicaRegistrada = true;
+        getActivity().getIntent().removeExtra("edicion");
+        helper.mostrarMensaje("vamos a editar", getContext());
     }
 
 

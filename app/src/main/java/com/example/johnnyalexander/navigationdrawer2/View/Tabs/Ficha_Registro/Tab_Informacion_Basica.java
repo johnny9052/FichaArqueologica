@@ -63,7 +63,6 @@ public class Tab_Informacion_Basica extends Fragment {
         verificarDatos();
 
 
-
         return view;
     }
 
@@ -85,9 +84,14 @@ public class Tab_Informacion_Basica extends Fragment {
 
         /*Se valida si existe informacion previamente cargada para realizar una edicion de datos,
         * cargando en los datos del formulario la informacion*/
-        if(ficha.fichaTemporal.basica.getCorte()!="" && ficha.fichaTemporal.basica.getCorte()!=null){
-            helper.mostrarMensaje("debemos cargar datos",getContext());
+        try {
+            if (!ficha.fichaTemporal.basica.getCorte().equals("") && !ficha.fichaTemporal.basica.getCorte().equals(null)) {
+                cargarDatos();
+            }
+        } catch (Exception e) {
+            helper.mostrarMensaje(e.getMessage().toString(), getContext());
         }
+
 
     }
 
@@ -227,15 +231,52 @@ public class Tab_Informacion_Basica extends Fragment {
             if (helper.ArchivoTextoCrear(json, nombreArchivo, getContext(), "json")) {
                 helper.mostrarMensajeInferiorPantalla("Almacenado correctamente", view);
                 /*Indicamos que ya se pueden guardar las otras pestañas*/
-                ficha.infoBasicaRegistrada =true;
+                ficha.infoBasicaRegistrada = true;
             } else {
                 helper.mostrarMensajeInferiorPantalla("Error al almacenar", view);
             }
         } else {
             helper.mostrarMensajeInferiorPantalla("Verifique los campos obligatorios", getView());
         }
+    }
 
 
+    public void cargarDatos(){
+        helper.mostrarMensaje("Cargar datos info basica", getContext());
+
+        txtProfesionalInfoBasica.setText(ficha.fichaTemporal.basica.getNombreProfesional());
+        txtNumeroSitioInfoBasica.setText(ficha.fichaTemporal.basica.getNumeroSitio()+"");
+        txtCorteInfoBasica.setText(ficha.fichaTemporal.basica.getCorte());
+
+        /*
+        ficha.fichaTemporal.basica.setPredio(txtPredioInfoBasica.getText().toString());
+        ficha.fichaTemporal.basica.setVereda(txtVeredaInfoBasica.getText().toString());
+        ficha.fichaTemporal.basica.setMunicipio(spnMunicipios.getSelectedItem().toString());
+        ficha.fichaTemporal.basica.setPk(txtPKInfoBasica.getText().toString());
+        ficha.fichaTemporal.basica.setFuenteHidrica(txtFuenteHidricaInfoBasica.getText().toString());
+        ficha.fichaTemporal.basica.setNivelesExcavacion(helper.editTextValidarNumeroEntero(txtNivelExcavacionInfoBasica));
+        ficha.fichaTemporal.basica.setElementoPaisaje(spnPaisaje.getSelectedItem().toString());
+        ficha.fichaTemporal.basica.setMicrotopografia(spnMicrotopografia.getSelectedItem().toString());
+        ficha.fichaTemporal.basica.setCoverturaVegetal(spnCoberturaVegetal.getSelectedItem().toString());
+        ficha.fichaTemporal.basica.setDescripcionGeneralSitio(txtDescripcionSitioInfoBasica.getText().toString());
+        ficha.fichaTemporal.basica.setAgriculturaFactorAlteracion(chkAgriculturaInfoBasica.isChecked());
+        ficha.fichaTemporal.basica.setGanaderiaFactorAlteracion(chkGanaderiaInfoBasica.isChecked());
+        ficha.fichaTemporal.basica.setErocionFactorAlteracion(chkErosionInfoBasica.isChecked());
+        ficha.fichaTemporal.basica.setInundacionFactorAlteracion(chkInundacionInfoBasica.isChecked());
+        ficha.fichaTemporal.basica.setGuaqueriaFactorAlteracion(chkGuaqueriaInfoBasica.isChecked());
+        ficha.fichaTemporal.basica.setObraCivilFactorAlteracion(chkObraCivilInfoBasica.isChecked());
+        ficha.fichaTemporal.basica.setMovimientosMasivosFactorAlteracion(chkMovimientosMasivosInfoBasica.isChecked());
+        ficha.fichaTemporal.basica.setOtroFactorAlteracion(chkOtroInfoBasica.isChecked());
+        ficha.fichaTemporal.basica.setGradoConservacion(spnConservacion.getSelectedItem().toString());
+        ficha.fichaTemporal.basica.setWp(txtWPInfoBasica.getText().toString());
+        ficha.fichaTemporal.basica.setCoordenaraX(helper.editTextValidarNumeroReal(txtCoordenadaX));
+        ficha.fichaTemporal.basica.setGetCoordenaraY(helper.editTextValidarNumeroReal(txtCoordenadaY));
+        ficha.fichaTemporal.basica.setResultado(spnResultado.getSelectedItem().toString());
+        ficha.fichaTemporal.basica.setProfundidad1(helper.editTextValidarNumeroReal(txtProfundidadInic1InfoBasica));
+        ficha.fichaTemporal.basica.setProfundidad2(helper.editTextValidarNumeroReal(txtProfundidadInic2InfoBasica));
+        ficha.fichaTemporal.basica.setProfundidad3(helper.editTextValidarNumeroReal(txtProfundidadInic3InfoBasica));
+        ficha.fichaTemporal.basica.setProfundidad4(helper.editTextValidarNumeroReal(txtProfundidadInic4InfoBasica));
+        */
     }
 
 
