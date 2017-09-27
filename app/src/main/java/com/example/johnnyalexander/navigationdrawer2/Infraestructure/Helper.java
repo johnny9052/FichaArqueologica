@@ -19,7 +19,9 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.johnnyalexander.navigationdrawer2.Model.ClsEstratigrafia;
 import com.example.johnnyalexander.navigationdrawer2.Model.ClsFichaArqueologica;
+import com.example.johnnyalexander.navigationdrawer2.Model.ClsMaterialRecuperado;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -393,6 +395,40 @@ public class Helper extends Data {
         Gson gson = gsonBuilder.create();
         //Gson gson = new Gson();
         return gson.fromJson(json, ClsFichaArqueologica.class);
+    }
+
+
+
+    /**
+     * Convierte un JSON String a una etatigrafia
+     *
+     * @param json JSON String que representa una estatigrafia
+     * @return Objeto estratigrafia
+     */
+    public ClsEstratigrafia JSON_JSONToObjectEstatigrafia(String json) {
+        //LAS 2 PRIMERAS LINEAS SON NECESARIAS PARA CONVERTIR OBJETOS STATICOS
+        GsonBuilder gsonBuilder = new GsonBuilder();
+        gsonBuilder.excludeFieldsWithModifiers(java.lang.reflect.Modifier.TRANSIENT);
+        Gson gson = gsonBuilder.create();
+        //Gson gson = new Gson();
+        return gson.fromJson(json, ClsEstratigrafia.class);
+    }
+
+
+
+    /**
+     * Convierte un JSON String a un material recuperado
+     *
+     * @param json JSON String que representa un matetrial recuperado
+     * @return Objeto material recuperado
+     */
+    public ClsMaterialRecuperado JSON_JSONToObjectMaterialRecuperado(String json) {
+        //LAS 2 PRIMERAS LINEAS SON NECESARIAS PARA CONVERTIR OBJETOS STATICOS
+        GsonBuilder gsonBuilder = new GsonBuilder();
+        gsonBuilder.excludeFieldsWithModifiers(java.lang.reflect.Modifier.TRANSIENT);
+        Gson gson = gsonBuilder.create();
+        //Gson gson = new Gson();
+        return gson.fromJson(json, ClsMaterialRecuperado.class);
     }
 
 

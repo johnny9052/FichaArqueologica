@@ -17,6 +17,8 @@ import android.widget.Spinner;
 
 import com.example.johnnyalexander.navigationdrawer2.Controller.CtlFichasArqueologicas;
 import com.example.johnnyalexander.navigationdrawer2.Infraestructure.Helper;
+import com.example.johnnyalexander.navigationdrawer2.Model.ClsEstratigrafia;
+import com.example.johnnyalexander.navigationdrawer2.Model.ClsMaterialRecuperado;
 import com.example.johnnyalexander.navigationdrawer2.View.FragmentsDialog.Fragment_Dialog_Estratigrafia;
 import com.example.johnnyalexander.navigationdrawer2.R;
 import com.example.johnnyalexander.navigationdrawer2.View.FragmentsDialog.Fragment_Dialog_Material_Recuperado;
@@ -81,6 +83,9 @@ public class Tab_Material_Recuperado extends Fragment {
                     public void onItemClick(AdapterView<?> parent, View v,
                                             int posicion, long id) {
 
+                        ClsMaterialRecuperado temp = ficha.fichaTemporal.materialesRecuperados.get(posicion);
+                        abrirDialog(v, temp, posicion);
+
                     }
                 });
     }
@@ -91,7 +96,7 @@ public class Tab_Material_Recuperado extends Fragment {
         btnfNuevoMaterialRecuperado.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                abrirDialog(v);
+                abrirDialog(v, null, -1);
             }
         });
     }
@@ -102,20 +107,25 @@ public class Tab_Material_Recuperado extends Fragment {
 
 
 
-    public void abrirDialog(View view) {
-        // Create the fragment and show it as a dialog.
-        Fragment_Dialog_Material_Recuperado newFragment = Fragment_Dialog_Material_Recuperado.newInstance();
-        //Fragment_Dialog_Estratigrafia newFragment = new Fragment_Dialog_Estratigrafia();
+    public void abrirDialog(View view, ClsMaterialRecuperado temp, int pos) {
 
-           /*Con este se le asigna un listener, cuando se cierra el dialog fragment se ejecuta este bloque
+        Fragment_Dialog_Material_Recuperado newFragment;
+
+        if (temp == null) {
+            newFragment = Fragment_Dialog_Material_Recuperado.newInstance();
+        } else {
+            newFragment = Fragment_Dialog_Material_Recuperado.newInstance(temp, pos);
+        }
+
+        /*Con este se le asigna un listener, cuando se cierra el dialog fragment se ejecuta este bloque
         * de codigo*/
         newFragment.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialog) {
+                /*Refrescamos la lista*/
                 cargarListadoMaterialRecuperado();
             }
         });
-
 
         newFragment.show(getFragmentManager(), "dialog");
     }

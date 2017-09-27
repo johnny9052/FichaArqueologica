@@ -1,6 +1,7 @@
 package com.example.johnnyalexander.navigationdrawer2.View.Fragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -11,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 
 import com.example.johnnyalexander.navigationdrawer2.Infraestructure.Helper;
+import com.example.johnnyalexander.navigationdrawer2.MainActivity;
 import com.example.johnnyalexander.navigationdrawer2.Model.ClsUsuario;
 import com.example.johnnyalexander.navigationdrawer2.R;
 
@@ -24,7 +26,7 @@ public class Informacion_Personal extends Fragment {
 
     /*Referencias GUI*/
     EditText txtNombres, txtApellidos, txtEmail, txtProyecto;
-    FloatingActionButton btnGuardar;
+    FloatingActionButton btnGuardar, btnReset;
     /*END Referencias GUI*/
 
     @Override
@@ -50,6 +52,7 @@ public class Informacion_Personal extends Fragment {
         txtProyecto = (EditText) view.findViewById(R.id.txtProyectoInfoPersonal);
 
         btnGuardar = (FloatingActionButton) view.findViewById(R.id.btnfGuardarInfoPersonal);
+        btnReset = (FloatingActionButton) view.findViewById(R.id.btnfResetInfoPersonal);
     }
 
 
@@ -59,6 +62,15 @@ public class Informacion_Personal extends Fragment {
             @Override
             public void onClick(View v) {
                 guardarDatos(v);
+            }
+        });
+
+        btnReset.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getContext(), MainActivity.class);
+                startActivity(i);
+                getActivity().finish();
             }
         });
     }
@@ -91,7 +103,11 @@ public class Informacion_Personal extends Fragment {
         String email = txtEmail.getText().toString();
         String proyecto = txtProyecto.getText().toString();
 
-        if (nombre != "" && apellido != "" && email != "" && proyecto != "") {
+
+        if (helper.editTextValidarObligatorioMensaje(txtNombres) &&
+                helper.editTextValidarObligatorioMensaje(txtApellidos) &&
+                helper.editTextValidarObligatorioMensaje(txtEmail) &&
+                helper.editTextValidarObligatorioMensaje(txtProyecto)) {
 
 
             clsUsuario = new ClsUsuario(nombre, apellido, email, proyecto);
@@ -109,7 +125,7 @@ public class Informacion_Personal extends Fragment {
 
             editor.commit();
         } else {
-            helper.mostrarMensajeInferiorPantalla("Verifique la informacion", view);
+            helper.mostrarMensajeInferiorPantalla("Verifique los campos obligatorios", getView());
         }
     }
 

@@ -33,10 +33,28 @@ public class Fragment_Dialog_Estratigrafia extends DialogFragment {
     Helper helper;
     CtlFichasArqueologicas ficha;
 
+    int pos = -1;
+
 
     /*FUNCION NECESARIA PARA MOSTRAR EL DIALOG*/
     public static Fragment_Dialog_Estratigrafia newInstance() {
         return new Fragment_Dialog_Estratigrafia();
+    }
+
+
+    /*FUNCION NECESARIA PARA MOSTRAR EL DIALOG*/
+    public static Fragment_Dialog_Estratigrafia newInstance(ClsEstratigrafia obj, int pos) {
+
+        Fragment_Dialog_Estratigrafia f = new Fragment_Dialog_Estratigrafia();
+
+        Helper helperTemp = new Helper();
+        String json = helperTemp.JSON_ObjetoToJSON(obj);
+        Bundle args = new Bundle();
+        args.putString("estratigrafia", json);
+        args.putInt("pos", pos);
+        f.setArguments(args);
+
+        return f;
     }
 
     @Override
@@ -51,7 +69,36 @@ public class Fragment_Dialog_Estratigrafia extends DialogFragment {
         configuracionGUI(view);
         configuracionListeners();
 
+        cargarDatos();
+
         return view;
+    }
+
+    public void cargarDatos() {
+        Bundle args = getArguments();
+
+        try {
+            String json = args.getString("estratigrafia", "");
+
+            if (json != "" && json != null) {
+                ClsEstratigrafia temp = helper.JSON_JSONToObjectEstatigrafia(json);
+                txtNumeroHorizonteEstratigrafia.setText(helper.numeroValidarCargaObligatorio(temp.getNumeroHorizonte()));
+                txtHInicialEstratigrafia.setText(temp.getHorizonteInicial());
+                txtHFinalEstratigrafia.setText(temp.getHorizonteFinal());
+                txtColorEstratigrafia.setText(temp.getColor());
+                spnTexturaEstratigrafia.setSelection(helper.spinnerObtenerPosicionValor(spnTexturaEstratigrafia, temp.getTextura()));
+                spnEstructuraEstratigrafia.setSelection(helper.spinnerObtenerPosicionValor(spnEstructuraEstratigrafia, temp.getEstructura()));
+                spnConcistenciaEstratigrafia.setSelection(helper.spinnerObtenerPosicionValor(spnConcistenciaEstratigrafia, temp.getConsistencia()));
+                txtInclusionesEstratigrafia.setText(temp.getInclusiones());
+
+                pos = args.getInt("pos", -1);
+            }
+
+        } catch (Exception e) {
+
+        } finally {
+
+        }
     }
 
 
@@ -120,8 +167,12 @@ public class Fragment_Dialog_Estratigrafia extends DialogFragment {
                 String consistencia = spnConcistenciaEstratigrafia.getSelectedItem().toString();
                 String inclusiones = txtInclusionesEstratigrafia.getText().toString();
 
+                if (pos == -1) {
+                    ficha.fichaTemporal.estratigrafias.add(new ClsEstratigrafia(numeroHorizonte, horizonteInicial, horizonteFinal, color, textura, estructura, consistencia, inclusiones));
+                }else{
+                    ficha.fichaTemporal.estratigrafias.set(pos,new ClsEstratigrafia(numeroHorizonte, horizonteInicial, horizonteFinal, color, textura, estructura, consistencia, inclusiones));
+                }
 
-                ficha.fichaTemporal.estratigrafias.add(new ClsEstratigrafia(numeroHorizonte, horizonteInicial, horizonteFinal, color, textura, estructura, consistencia, inclusiones));
 
                 String json = helper.JSON_ObjetoToJSON(ficha.fichaTemporal);
 

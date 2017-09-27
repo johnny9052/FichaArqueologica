@@ -12,6 +12,7 @@ import android.widget.Spinner;
 
 import com.example.johnnyalexander.navigationdrawer2.Controller.CtlFichasArqueologicas;
 import com.example.johnnyalexander.navigationdrawer2.Infraestructure.Helper;
+import com.example.johnnyalexander.navigationdrawer2.Model.ClsEstratigrafia;
 import com.example.johnnyalexander.navigationdrawer2.Model.ClsMaterialRecuperado;
 import com.example.johnnyalexander.navigationdrawer2.R;
 
@@ -31,8 +32,26 @@ public class Fragment_Dialog_Material_Recuperado extends DialogFragment {
     Helper helper;
     CtlFichasArqueologicas ficha;
 
+    int pos = -1;
+
     public static Fragment_Dialog_Material_Recuperado newInstance() {
         return new Fragment_Dialog_Material_Recuperado();
+    }
+
+
+    /*FUNCION NECESARIA PARA MOSTRAR EL DIALOG*/
+    public static Fragment_Dialog_Material_Recuperado newInstance(ClsMaterialRecuperado obj, int pos) {
+
+        Fragment_Dialog_Material_Recuperado f = new Fragment_Dialog_Material_Recuperado();
+
+        Helper helperTemp = new Helper();
+        String json = helperTemp.JSON_ObjetoToJSON(obj);
+        Bundle args = new Bundle();
+        args.putString("materialRecuperado", json);
+        args.putInt("pos", pos);
+        f.setArguments(args);
+
+        return f;
     }
 
     @Override
@@ -67,7 +86,43 @@ public class Fragment_Dialog_Material_Recuperado extends DialogFragment {
         configuracionGUI(view);
         configuracionListeners();
 
+        cargarDatos();
+
         return view;
+    }
+
+
+    public void cargarDatos() {
+        Bundle args = getArguments();
+
+        try {
+            String json = args.getString("materialRecuperado", "");
+
+            if (json != "" && json != null) {
+
+                ClsMaterialRecuperado temp = helper.JSON_JSONToObjectMaterialRecuperado(json);
+
+                spnNivelMaterialRecuperado.setSelection(helper.spinnerObtenerPosicionValor(spnNivelMaterialRecuperado, temp.getNivel()));
+                txtCeramicaNoBolsasMaterial.setText(helper.numeroValidarCargaObligatorio(temp.getCeramicaNoBolsas()));
+                txtCeramicaNoFragmentosMaterial.setText(helper.numeroValidarCargaObligatorio(temp.getCeramicaNoFragmentos()));
+                txtLiticoNoBolsasMaterial.setText(helper.numeroValidarCargaObligatorio(temp.getLiticoNoBolsas()));
+                txtLiticoNoFragmentosMaterial.setText(helper.numeroValidarCargaObligatorio(temp.getLiticoNoFragmentos()));
+                txtCarbonNoBolsasMaterial.setText(helper.numeroValidarCargaObligatorio(temp.getCarbonNoBolsas()));
+                txtRestosOseosNoBolsasMaterial.setText(helper.numeroValidarCargaObligatorio(temp.getRestosOseosNoBolsas()));
+                txtRestosOseosNoFragmentosMaterial.setText(helper.numeroValidarCargaObligatorio(temp.getRestosOseosNoFragmentos()));
+                txtSueloNoBolsasMaterial.setText(helper.numeroValidarCargaObligatorio(temp.getSueloNoBolsas()));
+                txtVidrioNoBolsasMaterial.setText(helper.numeroValidarCargaObligatorio(temp.getVidrioNoBolsas()));
+                txtVidrioNoFragmentosMaterial.setText(helper.numeroValidarCargaObligatorio(temp.getVidrioNoBolsas()));
+                txtOtroNoBolsasMaterial.setText(helper.numeroValidarCargaObligatorio(temp.getOtroNoBolsas()));
+                txtDescripcionMaterial.setText(temp.getDescripcion());
+                pos = args.getInt("pos", -1);
+            }
+
+        } catch (Exception e) {
+
+        } finally {
+
+        }
     }
 
 
@@ -118,7 +173,11 @@ public class Fragment_Dialog_Material_Recuperado extends DialogFragment {
                 int otroNoBolsas = helper.editTextValidarNumeroEntero(txtOtroNoBolsasMaterial);
                 String descripcion = txtDescripcionMaterial.getText().toString();
 
-                ficha.fichaTemporal.materialesRecuperados.add(new ClsMaterialRecuperado(nivel, ceramicaNoBolsas, ceramicaNoFragmentos, liticoNoBolsas, liticoNoFragmentos, carbonNoBolsas, restosOseosNoBolsas, restosOseosNoFragmentos, sueloNoBolsas, vidrioNoBolsas, vidrioNoFragmentos, otroNoBolsas, descripcion));
+                if (pos == -1) {
+                    ficha.fichaTemporal.materialesRecuperados.add(new ClsMaterialRecuperado(nivel, ceramicaNoBolsas, ceramicaNoFragmentos, liticoNoBolsas, liticoNoFragmentos, carbonNoBolsas, restosOseosNoBolsas, restosOseosNoFragmentos, sueloNoBolsas, vidrioNoBolsas, vidrioNoFragmentos, otroNoBolsas, descripcion));
+                } else {
+                    ficha.fichaTemporal.materialesRecuperados.set(pos, new ClsMaterialRecuperado(nivel, ceramicaNoBolsas, ceramicaNoFragmentos, liticoNoBolsas, liticoNoFragmentos, carbonNoBolsas, restosOseosNoBolsas, restosOseosNoFragmentos, sueloNoBolsas, vidrioNoBolsas, vidrioNoFragmentos, otroNoBolsas, descripcion));
+                }
 
                 String json = helper.JSON_ObjetoToJSON(ficha.fichaTemporal);
 

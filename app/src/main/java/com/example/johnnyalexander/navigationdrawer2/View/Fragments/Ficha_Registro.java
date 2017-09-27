@@ -84,7 +84,7 @@ public class Ficha_Registro extends Fragment {
             /*Si se recibio algun tipo de dato*/
             if (bundle != null) {
                 /*Se obtiene el extra edicion*/
-                temp = bundle.getString("edicion");
+                temp = bundle.getString("edicion","");
 
                 /*Si es diferente de true es porque va a registrar un nuevo archivo*/
                 if (!temp.equals("true")) {

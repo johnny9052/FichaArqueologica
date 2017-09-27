@@ -15,6 +15,7 @@ import android.widget.ListView;
 
 import com.example.johnnyalexander.navigationdrawer2.Controller.CtlFichasArqueologicas;
 import com.example.johnnyalexander.navigationdrawer2.Infraestructure.Helper;
+import com.example.johnnyalexander.navigationdrawer2.Model.ClsEstratigrafia;
 import com.example.johnnyalexander.navigationdrawer2.View.FragmentsDialog.Fragment_Dialog_Estratigrafia;
 import com.example.johnnyalexander.navigationdrawer2.R;
 
@@ -74,7 +75,8 @@ public class Tab_Estatigrafia extends Fragment {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View v,
                                             int posicion, long id) {
-
+                        ClsEstratigrafia temp = ficha.fichaTemporal.estratigrafias.get(posicion);
+                        abrirDialog(v, temp, posicion);
                     }
                 });
     }
@@ -84,7 +86,7 @@ public class Tab_Estatigrafia extends Fragment {
         btnfNuevaEstratigrafia.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                abrirDialog(v);
+                abrirDialog(v, null, -1);
             }
         });
     }
@@ -96,9 +98,16 @@ public class Tab_Estatigrafia extends Fragment {
     }
 
 
-    public void abrirDialog(View view) {
+    public void abrirDialog(View view, ClsEstratigrafia temp, int pos) {
 
-        Fragment_Dialog_Estratigrafia newFragment = Fragment_Dialog_Estratigrafia.newInstance();
+
+        Fragment_Dialog_Estratigrafia newFragment;
+
+        if (temp == null) {
+            newFragment = Fragment_Dialog_Estratigrafia.newInstance();
+        } else {
+            newFragment = Fragment_Dialog_Estratigrafia.newInstance(temp, pos);
+        }
         //Fragment_Dialog_Estratigrafia newFragment = new Fragment_Dialog_Estratigrafia();
 
         /*Con este se le asigna un listener, cuando se cierra el dialog fragment se ejecuta este bloque

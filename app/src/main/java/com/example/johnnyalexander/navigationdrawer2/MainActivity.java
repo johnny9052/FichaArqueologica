@@ -1,5 +1,7 @@
 package com.example.johnnyalexander.navigationdrawer2;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.design.widget.NavigationView;
@@ -10,6 +12,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.TextView;
 
 import com.example.johnnyalexander.navigationdrawer2.View.Fragments.Lista_Fichas;
 import com.example.johnnyalexander.navigationdrawer2.View.Fragments.Ficha_Registro;
@@ -21,6 +26,10 @@ public class MainActivity extends AppCompatActivity
 
 
     FragmentManager fragmentManager;
+
+    TextView txtNombreUsuarioNavigationDrawer, txtCorreoNavigationDrawer, txtProyectoNavigationDrawer;
+
+    SharedPreferences persistencia;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,7 +49,6 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
 
-
         Bundle bundle = getIntent().getExtras();
         String fragmentDefecto = "";
 
@@ -57,11 +65,46 @@ public class MainActivity extends AppCompatActivity
 
         cargarFormularioPorDefecto(fragmentDefecto);
 
+        cargarInformacionUsuario(navigationView);
+
+
+    }
+
+    public void cargarInformacionUsuario(NavigationView navigationView) {
+
+        View headerView = navigationView.getHeaderView(0);
+
+        txtNombreUsuarioNavigationDrawer = (TextView) headerView.findViewById(R.id.txtNombreUsuarioNavigationDrawer);
+        txtCorreoNavigationDrawer = (TextView) headerView.findViewById(R.id.txtCorreoNavigationDrawer);
+        txtProyectoNavigationDrawer = (TextView) headerView.findViewById(R.id.txtProyectoNavigationDrawer);
+
+        persistencia = getApplicationContext().getSharedPreferences("ClsUsuario", Context.MODE_PRIVATE);
+
+        if (persistencia.getString("nombres", null) != null) {
+            txtNombreUsuarioNavigationDrawer.setText(persistencia.getString("nombres", "") + " " +
+                    persistencia.getString("apellidos", ""));
+        } else {
+            txtNombreUsuarioNavigationDrawer.setText("No existe usuario");
+        }
+
+        if (persistencia.getString("correoElectronico", null) != null) {
+            txtCorreoNavigationDrawer.setText(persistencia.getString("correoElectronico", ""));
+        } else {
+            txtCorreoNavigationDrawer.setText("No existe correo");
+        }
+
+        if (persistencia.getString("nombreProyecto", null) != null) {
+            txtCorreoNavigationDrawer.setText(persistencia.getString("nombreProyecto", null));
+        } else {
+            txtCorreoNavigationDrawer.setText("No existe proyecto");
+        }
+
+
     }
 
 
     public void cargarFormularioPorDefecto(String fragment) {
-        try{
+        try {
             switch (fragment) {
                 case "registroFicha":
                     fragmentManager.beginTransaction().replace(R.id.masterLayout, new Ficha_Registro()).commit();
@@ -70,7 +113,7 @@ public class MainActivity extends AppCompatActivity
                     fragmentManager.beginTransaction().replace(R.id.masterLayout, new Lista_Fichas()).commit();
                     break;
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             fragmentManager.beginTransaction().replace(R.id.masterLayout, new Lista_Fichas()).commit();
         }
 
