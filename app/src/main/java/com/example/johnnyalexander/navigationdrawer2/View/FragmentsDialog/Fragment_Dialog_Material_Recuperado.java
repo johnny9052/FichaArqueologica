@@ -22,24 +22,39 @@ import java.io.IOException;
 public class Fragment_Dialog_Material_Recuperado extends DialogFragment {
 
 
+    /*Elementos GUI*/
     EditText txtCeramicaNoBolsasMaterial, txtCeramicaNoFragmentosMaterial, txtLiticoNoBolsasMaterial,
             txtLiticoNoFragmentosMaterial, txtCarbonNoBolsasMaterial, txtRestosOseosNoBolsasMaterial,
             txtRestosOseosNoFragmentosMaterial, txtSueloNoBolsasMaterial, txtVidrioNoBolsasMaterial,
             txtVidrioNoFragmentosMaterial, txtOtroNoBolsasMaterial, txtDescripcionMaterial;
     Spinner spnNivelMaterialRecuperado;
     Button btnGuardarMaterialRecuperado, btnCancelarMaterialRecuperado;
+    /*END Elementos GUI*/
 
+
+    /*Referencia objetos*/
     Helper helper;
     CtlFichasArqueologicas ficha;
+    /*END Referencia objetos*/
 
+    /*Posicion global para determinar una posible actulizacion. -1 = Guardar, valor direfente es
+    * la posicion del elemento a editar*/
     int pos = -1;
 
+
+
+    /*FUNCIONES NECESARIA PARA MOSTRAR EL DIALOG*/
+
+    /**
+     * Instancia el dialogo
+     *
+     * @return Dialogo solicitado
+     */
     public static Fragment_Dialog_Material_Recuperado newInstance() {
         return new Fragment_Dialog_Material_Recuperado();
     }
 
 
-    /*FUNCION NECESARIA PARA MOSTRAR EL DIALOG*/
     public static Fragment_Dialog_Material_Recuperado newInstance(ClsMaterialRecuperado obj, int pos) {
 
         Fragment_Dialog_Material_Recuperado f = new Fragment_Dialog_Material_Recuperado();
@@ -54,6 +69,9 @@ public class Fragment_Dialog_Material_Recuperado extends DialogFragment {
         return f;
     }
 
+    /*END FUNCION NECESARIA PARA MOSTRAR EL DIALOG*/
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -62,26 +80,6 @@ public class Fragment_Dialog_Material_Recuperado extends DialogFragment {
 
         helper = new Helper();
         ficha = new CtlFichasArqueologicas();
-
-        btnGuardarMaterialRecuperado = (Button) view.findViewById(R.id.btnGuardarMaterialRecuperado);
-
-        btnCancelarMaterialRecuperado = (Button) view.findViewById(R.id.btnCancelarMaterialRecuperado);
-
-        spnNivelMaterialRecuperado = (Spinner) view.findViewById(R.id.spnNivelMaterialRecuperado);
-
-
-        txtCeramicaNoBolsasMaterial = (EditText) view.findViewById(R.id.txtCeramicaNoBolsasMaterial);
-        txtCeramicaNoFragmentosMaterial = (EditText) view.findViewById(R.id.txtCeramicaNoFragmentosMaterial);
-        txtLiticoNoBolsasMaterial = (EditText) view.findViewById(R.id.txtLiticoNoBolsasMaterial);
-        txtLiticoNoFragmentosMaterial = (EditText) view.findViewById(R.id.txtLiticoNoFragmentosMaterial);
-        txtCarbonNoBolsasMaterial = (EditText) view.findViewById(R.id.txtCarbonNoBolsasMaterial);
-        txtRestosOseosNoBolsasMaterial = (EditText) view.findViewById(R.id.txtRestosOseosNoBolsasMaterial);
-        txtRestosOseosNoFragmentosMaterial = (EditText) view.findViewById(R.id.txtRestosOseosNoFragmentosMaterial);
-        txtSueloNoBolsasMaterial = (EditText) view.findViewById(R.id.txtSueloNoBolsasMaterial);
-        txtVidrioNoBolsasMaterial = (EditText) view.findViewById(R.id.txtVidrioNoBolsasMaterial);
-        txtVidrioNoFragmentosMaterial = (EditText) view.findViewById(R.id.txtVidrioNoFragmentosMaterial);
-        txtOtroNoBolsasMaterial = (EditText) view.findViewById(R.id.txtOtroNoBolsasMaterial);
-        txtDescripcionMaterial = (EditText) view.findViewById(R.id.txtDescripcionMaterial);
 
         configuracionGUI(view);
         configuracionListeners();
@@ -92,6 +90,9 @@ public class Fragment_Dialog_Material_Recuperado extends DialogFragment {
     }
 
 
+    /**
+     * Se determina si existe un objeto para cargar los datos en los campos
+     */
     public void cargarDatos() {
         Bundle args = getArguments();
 
@@ -112,7 +113,7 @@ public class Fragment_Dialog_Material_Recuperado extends DialogFragment {
                 txtRestosOseosNoFragmentosMaterial.setText(helper.numeroValidarCargaObligatorio(temp.getRestosOseosNoFragmentos()));
                 txtSueloNoBolsasMaterial.setText(helper.numeroValidarCargaObligatorio(temp.getSueloNoBolsas()));
                 txtVidrioNoBolsasMaterial.setText(helper.numeroValidarCargaObligatorio(temp.getVidrioNoBolsas()));
-                txtVidrioNoFragmentosMaterial.setText(helper.numeroValidarCargaObligatorio(temp.getVidrioNoBolsas()));
+                txtVidrioNoFragmentosMaterial.setText(helper.numeroValidarCargaObligatorio(temp.getVidrioNoFragmentos()));
                 txtOtroNoBolsasMaterial.setText(helper.numeroValidarCargaObligatorio(temp.getOtroNoBolsas()));
                 txtDescripcionMaterial.setText(temp.getDescripcion());
                 pos = args.getInt("pos", -1);
@@ -125,7 +126,9 @@ public class Fragment_Dialog_Material_Recuperado extends DialogFragment {
         }
     }
 
-
+    /**
+     * Se configuran los listeners de los objetos
+     */
     public void configuracionListeners() {
 
         btnGuardarMaterialRecuperado.setOnClickListener(new View.OnClickListener() {
@@ -148,12 +151,41 @@ public class Fragment_Dialog_Material_Recuperado extends DialogFragment {
 
     }
 
-
+    /**
+     *Se asocian los elementos graficos y otras confuguraciones
+     */
     public void configuracionGUI(View view) {
+
+        btnGuardarMaterialRecuperado = (Button) view.findViewById(R.id.btnGuardarMaterialRecuperado);
+
+        btnCancelarMaterialRecuperado = (Button) view.findViewById(R.id.btnCancelarMaterialRecuperado);
+
+        spnNivelMaterialRecuperado = (Spinner) view.findViewById(R.id.spnNivelMaterialRecuperado);
+
+
+        txtCeramicaNoBolsasMaterial = (EditText) view.findViewById(R.id.txtCeramicaNoBolsasMaterial);
+        txtCeramicaNoFragmentosMaterial = (EditText) view.findViewById(R.id.txtCeramicaNoFragmentosMaterial);
+        txtLiticoNoBolsasMaterial = (EditText) view.findViewById(R.id.txtLiticoNoBolsasMaterial);
+        txtLiticoNoFragmentosMaterial = (EditText) view.findViewById(R.id.txtLiticoNoFragmentosMaterial);
+        txtCarbonNoBolsasMaterial = (EditText) view.findViewById(R.id.txtCarbonNoBolsasMaterial);
+        txtRestosOseosNoBolsasMaterial = (EditText) view.findViewById(R.id.txtRestosOseosNoBolsasMaterial);
+        txtRestosOseosNoFragmentosMaterial = (EditText) view.findViewById(R.id.txtRestosOseosNoFragmentosMaterial);
+        txtSueloNoBolsasMaterial = (EditText) view.findViewById(R.id.txtSueloNoBolsasMaterial);
+        txtVidrioNoBolsasMaterial = (EditText) view.findViewById(R.id.txtVidrioNoBolsasMaterial);
+        txtVidrioNoFragmentosMaterial = (EditText) view.findViewById(R.id.txtVidrioNoFragmentosMaterial);
+        txtOtroNoBolsasMaterial = (EditText) view.findViewById(R.id.txtOtroNoBolsasMaterial);
+        txtDescripcionMaterial = (EditText) view.findViewById(R.id.txtDescripcionMaterial);
+
         helper.spinnerCargarDatos(this.getActivity(), helper.getNiveles(), spnNivelMaterialRecuperado);
     }
 
 
+    /**
+     *
+     * Se almacena un nuevo material
+     *
+     * @throws IOException
+     */
     public void guardarMaterialRecuperado() throws IOException {
 
         if (ficha.infoBasicaRegistrada) {
@@ -196,11 +228,16 @@ public class Fragment_Dialog_Material_Recuperado extends DialogFragment {
 
     }
 
+
+    /**
+     * Cierra el dialogo actual
+     */
     public void cancelarMaterialRecuperado() {
         getDialog().dismiss();
     }
 
 
+    /*CODIGO NECESARIO PARA QUE SE EJECUTE LA FUNCION EN EL FRAGMENT ANTERIOR CUANDO ESTE SE CIERRA*/
     private DialogInterface.OnDismissListener onDismissListener;
 
     public void setOnDismissListener(DialogInterface.OnDismissListener onDismissListener) {
@@ -215,5 +252,6 @@ public class Fragment_Dialog_Material_Recuperado extends DialogFragment {
         }
     }
 
+    /*END CODIGO NECESARIO PARA QUE SE EJECUTE LA FUNCION EN EL FRAGMENT ANTERIOR CUANDO ESTE SE CIERRA*/
 
 }

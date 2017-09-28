@@ -4,8 +4,6 @@
     android:layout_height="match_parent"
     tools:context=".View.FragmentsDialog.Fragment_Dialog_Estratigrafia">
 
-
-
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -13,9 +11,19 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:minWidth="1000dp">
 
+
+            <TextView
+                android:id="@+id/lblNumeroHorizonteEstratigrafia"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Numero de horizonte"
+                android:paddingTop="10dp"
+                android:textSize="18sp"
+                android:textStyle="bold" />
 
             <EditText
                 android:id="@+id/txtNumeroHorizonteEstratigrafia"
@@ -24,9 +32,18 @@
                 android:layout_weight="1"
                 android:paddingTop="15dp"
                 android:ems="10"
-                android:hint="N. de horz"
+                android:hint="Ingrese numero de horizonte"
 
                 android:inputType="number" />
+
+            <TextView
+                android:id="@+id/lblHorizonteInicialEstratigrafia"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="10dp"
+                android:text="Horizonte inicial"
+                android:textSize="18sp"
+                android:textStyle="bold" />
 
             <EditText
                 android:id="@+id/txtHInicialEstratigrafia"
@@ -35,8 +52,18 @@
                 android:layout_weight="1"
                 android:paddingTop="15dp"
                 android:ems="10"
-                android:hint="H. inicial"
+                android:hint="Ingrese horizonte inicial"
                 android:inputType="text" />
+
+
+            <TextView
+                android:id="@+id/lblHorizonteFinalEstratigrafia"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="10dp"
+                android:text="Horizonte final"
+                android:textSize="18sp"
+                android:textStyle="bold" />
 
             <EditText
                 android:id="@+id/txtHFinalEstratigrafia"
@@ -45,8 +72,18 @@
                 android:layout_weight="1"
                 android:ems="10"
                 android:paddingTop="15dp"
-                android:hint="H. final"
+                android:hint="Ingrese horizonte final"
                 android:inputType="text" />
+
+
+            <TextView
+                android:id="@+id/lblColorEstratigrafia"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="10dp"
+                android:text="Color"
+                android:textSize="18sp"
+                android:textStyle="bold" />
 
             <EditText
                 android:id="@+id/txtColorEstratigrafia"
@@ -55,7 +92,7 @@
                 android:layout_weight="1"
                 android:ems="10"
                 android:paddingTop="15dp"
-                android:hint="Color"
+                android:hint="Ingrese color"
                 android:inputType="text" />
 
             <TextView
@@ -105,13 +142,23 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1" />
 
+
+            <TextView
+                android:id="@+id/lblInclusionesEstratigrafia"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="10dp"
+                android:text="Inclusiones"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
             <EditText
                 android:id="@+id/txtInclusionesEstratigrafia"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:ems="10"
-                android:hint="Inclusiones"
+                android:hint="Ingrese inclusiones"
                 android:inputType="textPersonName" />
 
             <LinearLayout

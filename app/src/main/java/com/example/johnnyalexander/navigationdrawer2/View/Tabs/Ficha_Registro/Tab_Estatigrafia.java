@@ -26,8 +26,10 @@ import java.util.ArrayList;
 
 public class Tab_Estatigrafia extends Fragment {
 
+    /*Referencias objetos*/
     Helper helper;
     CtlFichasArqueologicas ficha;
+    /*END Referencias objetos*/
 
     /*Elementos GUI*/
     private ListView lstEstratigrafias;
@@ -53,6 +55,9 @@ public class Tab_Estatigrafia extends Fragment {
     }
 
 
+    /**
+     * Carga en el listview el listado de todas las estratigrafias
+     */
     public void cargarListadoEstratigrafias() {
 
         ArrayList<String> listaPublica = new ArrayList<String>();
@@ -70,6 +75,7 @@ public class Tab_Estatigrafia extends Fragment {
 
         lstEstratigrafias.setAdapter(adapter);
 
+        /*Solo si se tienen estratigrafias se añade un listener*/
         if (ficha.fichaTemporal.estratigrafias.size() > 0) {
             lstEstratigrafias.setOnItemClickListener
                     (new AdapterView.OnItemClickListener() {
@@ -80,10 +86,25 @@ public class Tab_Estatigrafia extends Fragment {
                             abrirDialog(v, temp, posicion);
                         }
                     });
+
+
+            lstEstratigrafias.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+                @Override
+                public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
+                                               int pos, long id) {
+
+                    helper.mostrarMensaje("Largo!!!", getContext());
+
+                    return true;
+                }
+            });
         }
     }
 
 
+    /**
+     * Se asocian los eventos a los elementos graficos
+     */
     public void configuracionListeners() {
         btnfNuevaEstratigrafia.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -94,12 +115,26 @@ public class Tab_Estatigrafia extends Fragment {
     }
 
 
+    /**
+     * Se asocian los componentes graficos para su uso
+     *
+     * @param view Vista donde se encuentra los componentes graficos
+     */
     public void configuracionGUI(View view) {
         btnfNuevaEstratigrafia = (FloatingActionButton) view.findViewById(R.id.btnfNuevaEstratigrafia);
         lstEstratigrafias = (ListView) view.findViewById(R.id.lstEstratigrafias);
     }
 
 
+    /**
+     * Abre un dialog para crear o editar una estratigrafia
+     *
+     * @param view Vista donde se abrira el dialog
+     * @param temp Objeto estratigrafia, por si se va a cargar informacion para su respectiva
+     *             edicion, si no hay ninguno se manda null
+     * @param pos  Posicion donde se sobrescribira el objeto para editarolo, si no se va a editar se
+     *             manda -1
+     */
     public void abrirDialog(View view, ClsEstratigrafia temp, int pos) {
 
 

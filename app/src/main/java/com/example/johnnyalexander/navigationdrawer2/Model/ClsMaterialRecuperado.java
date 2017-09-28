@@ -27,8 +27,8 @@ public class ClsMaterialRecuperado {
         this.nivel = nivel;
         this.ceramicaNoBolsas = ceramicaNoBolsas;
         this.ceramicaNoFragmentos = ceramicaNoFragmentos;
-        liticoNoBolsas = liticoNoBolsas;
-        liticoNoFragmentos = liticoNoFragmentos;
+        this.liticoNoBolsas = liticoNoBolsas;
+        this.liticoNoFragmentos = liticoNoFragmentos;
         this.carbonNoBolsas = carbonNoBolsas;
         this.restosOseosNoBolsas = restosOseosNoBolsas;
         this.restosOseosNoFragmentos = restosOseosNoFragmentos;

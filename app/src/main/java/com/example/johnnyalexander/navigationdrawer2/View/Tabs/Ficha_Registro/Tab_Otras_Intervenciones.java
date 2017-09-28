@@ -1,11 +1,14 @@
 package com.example.johnnyalexander.navigationdrawer2.View.Tabs.Ficha_Registro;
 
+import android.Manifest;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +21,7 @@ import android.widget.RadioGroup;
 
 import com.example.johnnyalexander.navigationdrawer2.Controller.CtlFichasArqueologicas;
 import com.example.johnnyalexander.navigationdrawer2.Infraestructure.Helper;
+import com.example.johnnyalexander.navigationdrawer2.Infraestructure.Permisos;
 import com.example.johnnyalexander.navigationdrawer2.R;
 
 import java.io.IOException;
@@ -28,8 +32,11 @@ import static android.app.Activity.RESULT_OK;
 
 public class Tab_Otras_Intervenciones extends Fragment {
 
+    /*Referencia objetos*/
     Helper helper;
     CtlFichasArqueologicas ficha;
+    Permisos permisos;
+    /*END Referencia objetos*/
 
     /*Elementos GUI*/
     EditText txtFechaInicioOtrasIntervenciones, txtFechaFinOtrasIntervenciones;
@@ -55,7 +62,9 @@ public class Tab_Otras_Intervenciones extends Fragment {
     /*END Elementos GUI*/
 
 
+    /*Codigo de respuesta para el actionResult de la fotografia*/
     static final int REQUEST_IMAGE_CAPTURE = 1;
+    /*Numero de la foto*/
     int numberPhoto;
 
 
@@ -67,6 +76,7 @@ public class Tab_Otras_Intervenciones extends Fragment {
 
         helper = new Helper();
         ficha = new CtlFichasArqueologicas();
+        permisos = new Permisos();
 
         configuracionGUI(view);
         configuracionListeners();
@@ -76,14 +86,18 @@ public class Tab_Otras_Intervenciones extends Fragment {
         return view;
     }
 
-
+    /**
+     * Verifica si ya existe informacion de usuario para cargarla
+     */
     public void verificarDatos() {
         if (ficha.fichaTemporal.basica.getCorte() != "") {
             cargarDatos();
         }
     }
 
-
+    /**
+     * Se asocian los listeners a los botones
+     */
     public void configuracionListeners() {
 
         helper.editTextToCalendar(txtFechaInicioOtrasIntervenciones, getActivity());
@@ -110,7 +124,7 @@ public class Tab_Otras_Intervenciones extends Fragment {
             @Override
             public void onClick(View view) {
                 try {
-                    guardarOtrasIntervenciones(view);
+                    guardarOtrasIntervenciones(view, true);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -119,6 +133,12 @@ public class Tab_Otras_Intervenciones extends Fragment {
         /*End Actions - Listeners*/
     }
 
+
+    /**
+     * Asocia los elementos de la interfaz grafica, carga combos y prepara otros componentes
+     *
+     * @param view Vista con los elementos que seran asociados
+     */
     public void configuracionGUI(View view) {
         /*Referencias GUI*/
         txtNumeroAmpliacionesOtrasIntervenciones = (EditText) view.findViewById(R.id.txtNumeroAmpliacionesOtrasIntervenciones);
@@ -163,8 +183,14 @@ public class Tab_Otras_Intervenciones extends Fragment {
         /*END Referencias GUI*/
     }
 
-
-    public void guardarOtrasIntervenciones(View view) throws IOException {
+    /**
+     * Guarda la informacion basica de otras intervensiones
+     *
+     * @param view    Vista con los elementos donde se obtendran los datos
+     * @param mensaje Indica si se debe de mostrar mensajes al intententar guardar o no
+     * @throws IOException
+     */
+    public void guardarOtrasIntervenciones(View view, boolean mensaje) throws IOException {
 
         if (ficha.infoBasicaRegistrada) {
 
@@ -194,20 +220,28 @@ public class Tab_Otras_Intervenciones extends Fragment {
             String nombreArchivo = helper.nombreArchivo(ficha.fichaTemporal);
 
             if (helper.ArchivoTextoCrear(json, nombreArchivo, getContext(), "json")) {
-                helper.mostrarMensajeInferiorPantalla("Almacenado correctamente", view);
+                if (mensaje) {
+                    helper.mostrarMensajeInferiorPantalla("Almacenado correctamente", view);
+                }
             } else {
                 helper.mostrarMensajeInferiorPantalla("Error al almacenar", view);
             }
         } else {
-            helper.mostrarMensaje("Primero debe almacenar la informacion basica", getContext());
+            if (mensaje) {
+                helper.mostrarMensaje("Primero debe almacenar la informacion basica", getContext());
+            }
         }
 
 
     }
 
 
+    /**
+     * Activa la camara y retorna la imagen tomada en un actionResult
+     *
+     * @param numberPhoto
+     */
     public void tomarFoto(int numberPhoto) {
-
         this.numberPhoto = numberPhoto;
 
         String nombreArchivo = "imagen.jpg";
@@ -235,9 +269,11 @@ public class Tab_Otras_Intervenciones extends Fragment {
         }
     }
 
-
+    /**
+     * Carga informacion si existe previamente para su respectiva edicion
+     */
     public void cargarDatos() {
-        helper.mostrarMensaje("debemos cargar datos de interveciones", getContext());
+        //helper.mostrarMensaje("debemos cargar datos de interveciones", getContext());
 
 
         /*ArrayList<String> fotografias = new ArrayList<String>();
@@ -294,19 +330,36 @@ public class Tab_Otras_Intervenciones extends Fragment {
     /*
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        Log.e("**************","Entreeeeeeeee3");
     }
+    */
 
 
-
+    /**
+     * Funcion que se ejecuta cuando el fragment deja de estar visible
+     *
+     * @param isVisibleToUser
+     */
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
         if (isVisibleToUser) {
-
-        }else{
+            //Log.e("**************", "Entreeeeeeeee2");
+        } else {
+            if (getView() != null) {
+                try {
+                    //Log.e("**************", "Entreeeeeeeee");
+                    guardarOtrasIntervenciones(getView(), false);
+                } catch (IOException e) {
+                    //Log.e("**************", "Entreeeeeeeee con error");
+                    e.printStackTrace();
+                }
+            } else {
+                //Log.e("**************", "Entreeeeeeeee estaba vacio");
+            }
 
         }
-    }*/
+    }
 
 
 }

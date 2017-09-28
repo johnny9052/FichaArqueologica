@@ -30,19 +30,39 @@ public class Fragment_Dialog_Estratigrafia extends DialogFragment {
     /*END Elementos GUI*/
 
 
+    /*Referencia objetos*/
     Helper helper;
     CtlFichasArqueologicas ficha;
+    /*END referencia objetos*/
 
+    /*Posicion global para determinar una posible actulizacion. -1 = Guardar, valor direfente es
+    * la posicion del elemento a editar*/
     int pos = -1;
 
 
-    /*FUNCION NECESARIA PARA MOSTRAR EL DIALOG*/
+
+
+    /*FUNCIONES NECESARIA PARA MOSTRAR EL DIALOG*/
+
+    /**
+     *
+     * Instancia el dialogo
+     *
+     * @return Dialogo solicitado
+     */
     public static Fragment_Dialog_Estratigrafia newInstance() {
-        return new Fragment_Dialog_Estratigrafia();
+        Fragment_Dialog_Estratigrafia f = new Fragment_Dialog_Estratigrafia();
+        return f;
     }
 
 
-    /*FUNCION NECESARIA PARA MOSTRAR EL DIALOG*/
+    /**
+     *
+     * @param obj Objeto que se cargara en los campos cuando se abra el dialogo, y que sera
+     *            persistido en un extra llamado estratigrafia
+     * @param pos Posicion del elemento a editar
+     * @return Dialogo solicitado
+     */
     public static Fragment_Dialog_Estratigrafia newInstance(ClsEstratigrafia obj, int pos) {
 
         Fragment_Dialog_Estratigrafia f = new Fragment_Dialog_Estratigrafia();
@@ -56,6 +76,10 @@ public class Fragment_Dialog_Estratigrafia extends DialogFragment {
 
         return f;
     }
+
+    /*END FUNCIONES NECESARIA PARA MOSTRAR EL DIALOG*/
+
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -74,6 +98,10 @@ public class Fragment_Dialog_Estratigrafia extends DialogFragment {
         return view;
     }
 
+
+    /**
+     * Se determina si existe un objeto para cargar los datos en los campos
+     */
     public void cargarDatos() {
         Bundle args = getArguments();
 
@@ -102,6 +130,9 @@ public class Fragment_Dialog_Estratigrafia extends DialogFragment {
     }
 
 
+    /**
+     * Se configuran los listeners de los objetos
+     */
     public void configuracionListeners() {
 
         btnGuardarEstratigrafia.setOnClickListener(new View.OnClickListener() {
@@ -125,6 +156,9 @@ public class Fragment_Dialog_Estratigrafia extends DialogFragment {
     }
 
 
+    /**
+     *Se asocian los elementos graficos y otras confuguraciones
+     */
     public void configuracionGUI(View view) {
 
         txtNumeroHorizonteEstratigrafia = (EditText) view.findViewById(R.id.txtNumeroHorizonteEstratigrafia);
@@ -152,8 +186,16 @@ public class Fragment_Dialog_Estratigrafia extends DialogFragment {
     }
 
 
+    /**
+     *
+     * Se almacena una estratigrafia
+     *
+     * @param view Vista desde donde se capturaran los datos
+     * @throws IOException
+     */
     public void guardarEstratigrafia(View view) throws IOException {
 
+        /*Si ya se ha registrado la informacion basica de la ficha*/
         if (ficha.infoBasicaRegistrada) {
             if (helper.editTextValidarObligatorioMensaje(txtNumeroHorizonteEstratigrafia)) {
 

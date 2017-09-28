@@ -1,5 +1,6 @@
 package com.example.johnnyalexander.navigationdrawer2.View.Tabs.Ficha_Registro;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.location.Location;
@@ -7,6 +8,7 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.text.Layout;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +22,7 @@ import android.widget.Spinner;
 
 import com.example.johnnyalexander.navigationdrawer2.Controller.CtlFichasArqueologicas;
 import com.example.johnnyalexander.navigationdrawer2.Infraestructure.Helper;
+import com.example.johnnyalexander.navigationdrawer2.Infraestructure.Permisos;
 import com.example.johnnyalexander.navigationdrawer2.R;
 
 import java.io.IOException;
@@ -30,6 +33,7 @@ public class Tab_Informacion_Basica extends Fragment {
     /*Referencia objetos*/
     Helper helper;
     CtlFichasArqueologicas ficha;
+    Permisos permisos;
     /*END Referencia objetos*/
 
     /*Referencia persistencia*/
@@ -65,6 +69,7 @@ public class Tab_Informacion_Basica extends Fragment {
 
         helper = new Helper();
         ficha = new CtlFichasArqueologicas();
+        permisos = new Permisos();
 
         configuracionGUI(view);
         configuracionListeners();
@@ -105,12 +110,15 @@ public class Tab_Informacion_Basica extends Fragment {
     }
 
 
+    /**
+     * Se asocian los listeners a los botones
+     */
     public void configuracionListeners() {
         /*Actions - Listener*/
         btnCalcularCoordenadas.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                calcularCoordenadas();
+                calcularCoordenadas(v);
             }
         });
 
@@ -118,7 +126,7 @@ public class Tab_Informacion_Basica extends Fragment {
             @Override
             public void onClick(View view) {
                 try {
-                    guardarInformacionBasica(view);
+                    guardarInformacionBasica(view,true);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -133,12 +141,15 @@ public class Tab_Informacion_Basica extends Fragment {
     /**
      * Calcula las coordenadas y las carga en los campos de coordenadas
      */
-    public void calcularCoordenadas() {
-        Location loc = helper.gpsCalcularCoordenadas(getActivity(), getContext());
-        if (loc != null) {
-            txtCoordenadaX.setText((loc.getLatitude()) + "");
-            txtCoordenadaY.setText((loc.getLongitude()) + "");
-            helper.mostrarMensajeInferiorPantalla("Coordenadas calculadas",getView());
+    public void calcularCoordenadas(View view) {
+
+        if(permisos.verificarPermiso(Manifest.permission.ACCESS_FINE_LOCATION,permisos.LOCATION,getActivity())) {
+            Location loc = helper.gpsCalcularCoordenadas(getActivity(), getContext(),view);
+            if (loc != null) {
+                txtCoordenadaX.setText((loc.getLatitude()) + "");
+                txtCoordenadaY.setText((loc.getLongitude()) + "");
+                helper.mostrarMensajeInferiorPantalla("Coordenadas calculadas", getView());
+            }
         }
     }
 
@@ -217,9 +228,10 @@ public class Tab_Informacion_Basica extends Fragment {
      * Guarda la informacion basica de una ficha arqueologica
      *
      * @param view Vista con los elementos donde se obtendran los datos
+     * @param mensaje Indica si se debe de mostrar mensajes al intententar guardar o no
      * @throws IOException
      */
-    public void guardarInformacionBasica(View view) throws IOException {
+    public void guardarInformacionBasica(View view, boolean mensaje) throws IOException {
 
         if (helper.editTextValidarObligatorioMensaje(txtNumeroSitioInfoBasica) &&
                 helper.editTextValidarObligatorioMensaje(txtCorteInfoBasica)) {
@@ -260,16 +272,20 @@ public class Tab_Informacion_Basica extends Fragment {
             String nombreArchivo = helper.nombreArchivo(ficha.fichaTemporal);
 
             if (helper.ArchivoTextoCrear(json, nombreArchivo, getContext(), "json")) {
-                helper.mostrarMensajeInferiorPantalla("Almacenado correctamente", view);
+                if(mensaje){
+                    helper.mostrarMensajeInferiorPantalla("Almacenado correctamente", view);
+                }
                 /*Indicamos que ya se pueden guardar las otras pestañas*/
                 ficha.infoBasicaRegistrada = true;
             } else {
                 helper.mostrarMensajeInferiorPantalla("Error al almacenar", view);
             }
         } else {
-            helper.mostrarMensajeInferiorPantalla("Verifique los campos obligatorios", getView());
-            /*Se hace focus en la parte superior de la pantalla*/
-            scrollInformacionBasica.scrollTo(0, 0);
+            if(mensaje){
+                helper.mostrarMensajeInferiorPantalla("Verifique los campos obligatorios", getView());
+                /*Se hace focus en la parte superior de la pantalla*/
+                scrollInformacionBasica.scrollTo(0, 0);
+            }
         }
     }
 
@@ -317,5 +333,31 @@ public class Tab_Informacion_Basica extends Fragment {
 
     }
 
+
+    /**
+     *
+     * Funcion que se ejecuta cuando el fragment deja de estar visible
+     *
+     * @param isVisibleToUser
+     */
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser) {
+            //Log.e("**************", "Entreeeeeeeee2");
+        } else {
+            if (getView() != null) {
+                try {
+                    //Log.e("**************", "Entreeeeeeeee");
+                    guardarInformacionBasica(getView(),false);
+                } catch (IOException e) {
+                    //Log.e("**************", "Entreeeeeeeee con error");
+                    e.printStackTrace();
+                }
+            } else {
+                //Log.e("**************", "Entreeeeeeeee estaba vacio");
+            }
+
+        }
+    }
 
 }

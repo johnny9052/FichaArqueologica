@@ -398,7 +398,6 @@ public class Helper extends Data {
     }
 
 
-
     /**
      * Convierte un JSON String a una etatigrafia
      *
@@ -413,7 +412,6 @@ public class Helper extends Data {
         //Gson gson = new Gson();
         return gson.fromJson(json, ClsEstratigrafia.class);
     }
-
 
 
     /**
@@ -448,13 +446,13 @@ public class Helper extends Data {
      * @param context  Contexto desde donde se ejecuta la funcion
      * @return Objeto Location que contiene la posicion del dispositivo
      */
-    public Location gpsCalcularCoordenadas(Activity activity, Context context) {
+    public Location gpsCalcularCoordenadas(Activity activity, Context context, View view) {
 
         if (ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(activity,
                 Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
 
-            mostrarMensaje("No ha otorgado permisos para esto", activity);
+            mostrarMensajeInferiorPantalla("No ha otorgado permisos para esto", view);
 
         } else {
 
