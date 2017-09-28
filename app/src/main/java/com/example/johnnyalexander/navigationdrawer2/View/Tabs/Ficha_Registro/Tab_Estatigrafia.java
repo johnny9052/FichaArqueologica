@@ -62,7 +62,7 @@ public class Tab_Estatigrafia extends Fragment {
         }
 
         if (listaPublica.size() == 0) {
-            listaPublica.add("No se han añadido registros");
+            listaPublica.add("No se han añadido estratigrafias");
         }
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),
@@ -70,15 +70,17 @@ public class Tab_Estatigrafia extends Fragment {
 
         lstEstratigrafias.setAdapter(adapter);
 
-        lstEstratigrafias.setOnItemClickListener
-                (new AdapterView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> parent, View v,
-                                            int posicion, long id) {
-                        ClsEstratigrafia temp = ficha.fichaTemporal.estratigrafias.get(posicion);
-                        abrirDialog(v, temp, posicion);
-                    }
-                });
+        if (ficha.fichaTemporal.estratigrafias.size() > 0) {
+            lstEstratigrafias.setOnItemClickListener
+                    (new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> parent, View v,
+                                                int posicion, long id) {
+                            ClsEstratigrafia temp = ficha.fichaTemporal.estratigrafias.get(posicion);
+                            abrirDialog(v, temp, posicion);
+                        }
+                    });
+        }
     }
 
 

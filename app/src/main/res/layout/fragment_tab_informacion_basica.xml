@@ -1,428 +1,606 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".View.Fragments.Lista_Fichas">
 
 
-    <ScrollView
+    <!-- Con el atributo focusable siempre se enfoca en la
+     parte superior-->
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fillViewport="false"
-        android:paddingTop="120dp">
+        android:orientation="vertical"
+        android:id="@+id/lytInformacionBasica"
+        android:focusable="true"
+        android:focusableInTouchMode="true">
 
-        <LinearLayout
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_height="match_parent"
+            android:fillViewport="false"
+            android:id="@+id/scrollInformacionBasica">
 
             <LinearLayout
-                android:id="@+id/CapaInfoBasica"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:focusable="true"
-                android:focusableInTouchMode="true">
-
-                <EditText
-                    android:id="@+id/txtProfesionalInfoBasica"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:ems="10"
-                    android:hint="Profesional a cargo"
-                    android:inputType="text" />
-
-                <EditText
-                    android:id="@+id/txtNumeroSitioInfoBasica"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:ems="10"
-                    android:hint="Sitio numero"
-                    android:inputType="number" />
-
-                <EditText
-                    android:id="@+id/txtCorteInfoBasica"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:ems="10"
-                    android:hint="Corte"
-                    android:inputType="text" />
-
-                <EditText
-                    android:id="@+id/txtPredioInfoBasica"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:ems="10"
-                    android:hint="Predio"
-                    android:inputType="text" />
-
-                <EditText
-                    android:id="@+id/txtVeredaInfoBasica"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:ems="10"
-                    android:hint="Vereda"
-                    android:inputType="text" />
-
-
-                <TextView
-                    android:id="@+id/lblMunicipio"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingTop="10dp"
-                    android:text="Municipio"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
-
-
-                <Spinner
-                    android:id="@+id/spnMunicipioInfoBasica"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-
-                <EditText
-                    android:id="@+id/txtPKInfoBasica"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:ems="10"
-                    android:hint="PK"
-                    android:inputType="text" />
-
-                <EditText
-                    android:id="@+id/txtFuenteHidricaInfoBasica"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:ems="10"
-                    android:hint="Fuente hidrica asociada"
-                    android:inputType="text" />
-
-                <EditText
-                    android:id="@+id/txtNivelExcavacionInfoBasica"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:ems="10"
-                    android:hint="Niveles de excavacion"
-                    android:inputType="number" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/CapaCaracteristicasGenerales"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/textView2"
+                    android:id="@+id/lblInformacionBasicaFichaRegistro"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical|center"
-                    android:paddingTop="30dp"
-                    android:text="Caracteristicas generales del area"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/textView7"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingTop="30dp"
-                    android:text="Elementos del paisaje"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
-
-
-                <Spinner
-                    android:id="@+id/spnPaisajeInfoBasica"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-
-                <TextView
-                    android:id="@+id/textView8"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingTop="30dp"
-                    android:text="Microtopografia"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
-
-
-                <Spinner
-                    android:id="@+id/spnMicrotopografiaInfoBasica"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-
-                <TextView
-                    android:id="@+id/textView9"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingTop="30dp"
-                    android:text="Cobertura vegetal"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
-
-                <Spinner
-                    android:id="@+id/spnCoberturaVegetalInfoBasica"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/CapaDescripcionGeneral"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/textView3"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_vertical|center"
-                    android:paddingTop="30dp"
-                    android:text="Descripcion general del sitio"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
-
-                <EditText
-                    android:id="@+id/txtDescripcionSitioInfoBasica"
-                    android:layout_width="match_parent"
-                    android:layout_height="155dp"
-                    android:ems="10"
-                    android:hint="Ingrese la descripcion del sitio"
-                    android:inputType="textMultiLine" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/CapaEstadoDelSitio"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/textView4"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_vertical|center"
-                    android:paddingTop="30dp"
-                    android:text="Estado del sitio"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
-
-
-                <TextView
-                    android:id="@+id/textView15"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingBottom="10dp"
-                    android:paddingTop="30dp"
-                    android:text="Factores de alteracion"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal">
-
-                    <CheckBox
-                        android:id="@+id/chkAgriculturaInfoBasica"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Agricultura" />
-
-                    <CheckBox
-                        android:id="@+id/chkGanaderiaInfoBasica"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Ganaderia" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal">
-
-                    <CheckBox
-                        android:id="@+id/chkErosionInfoBasica"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Erosion" />
-
-                    <CheckBox
-                        android:id="@+id/chkInundacionInfoBasica"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Inundacion" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal">
-
-                    <CheckBox
-                        android:id="@+id/chkGuaqueriaInfoBasica"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Guaqueria" />
-
-                    <CheckBox
-                        android:id="@+id/chkObraCivilInfoBasica"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Obra civil" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal">
-
-                    <CheckBox
-                        android:id="@+id/chkMovimientosMasivosInfoBasica"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Movimientos masivos" />
-
-                    <CheckBox
-                        android:id="@+id/chkOtroInfoBasica"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Otro" />
-                </LinearLayout>
-
-                <TextView
-                    android:id="@+id/textView16"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingTop="30dp"
-                    android:text="Grados de conservacion"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
-
-                <Spinner
-                    android:id="@+id/spnConservacionInfoBasica"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-
-                <TextView
-                    android:id="@+id/textView5"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:paddingTop="130dp"
                     android:paddingBottom="30dp"
-                    android:paddingTop="30dp"
-                    android:text="Informacion del corte"
+                    android:text="Informacion Basica"
                     android:textSize="18sp"
                     android:textStyle="bold" />
 
-                <EditText
-                    android:id="@+id/txtWPInfoBasica"
+                <LinearLayout
+                    android:id="@+id/CapaInfoBasica"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:ems="10"
-                    android:hint="WP"
-                    android:inputType="text" />
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
 
-                <Button
-                    android:id="@+id/btnCalcularCoordenadasInfoBasica"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Calcular  coordenadas" />
 
-                <EditText
-                    android:id="@+id/txtCoordenadaXInfoBasica"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:ems="10"
-                    android:hint="Coordenada X"
-                    android:inputType="number" />
+                    <TextView
+                        android:id="@+id/lblProfesionalInfoBasica"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="10dp"
+                        android:text="Profesional a cargo"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
 
-                <EditText
-                    android:id="@+id/txtCoordenadaYInfoBasica"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:ems="10"
-                    android:hint="Coordenada Y"
-                    android:inputType="number" />
+                    <EditText
+                        android:id="@+id/txtProfesionalInfoBasica"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:ems="10"
+                        android:hint="Ingrese profesional a cargo"
+                        android:inputType="text" />
 
-                <TextView
-                    android:id="@+id/lblResultado"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingTop="10dp"
-                    android:text="Resultado"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
 
-                <Spinner
-                    android:id="@+id/spnResultadoInfoBasica"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
 
-                <TextView
-                    android:id="@+id/textView6"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingBottom="30dp"
-                    android:paddingTop="30dp"
-                    android:text="Profundidades iniciales"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
+                    <TextView
+                        android:id="@+id/lblSitioNumeroInfoBasica"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="10dp"
+                        android:text="Sitio numero"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
 
-                <EditText
-                    android:id="@+id/txtProfundidadInic1InfoBasica"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:ems="10"
-                    android:hint="Profundidad 1"
-                    android:inputType="number" />
+                    <EditText
+                        android:id="@+id/txtNumeroSitioInfoBasica"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:ems="10"
+                        android:hint="Ingrese el numero del sitio"
+                        android:inputType="number" />
 
-                <EditText
-                    android:id="@+id/txtProfundidadInic2InfoBasica"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:ems="10"
-                    android:hint="Profundidad 2"
-                    android:inputType="number" />
 
-                <EditText
-                    android:id="@+id/txtProfundidadInic3InfoBasica"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:ems="10"
-                    android:hint="Profundidad 3"
-                    android:inputType="number" />
+                    <TextView
+                        android:id="@+id/lblCorteInfoBasica"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="10dp"
+                        android:text="Corte"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
 
-                <EditText
-                    android:id="@+id/txtProfundidadInic4InfoBasica"
+                    <EditText
+                        android:id="@+id/txtCorteInfoBasica"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:ems="10"
+                        android:hint="Ingrese el corte"
+                        android:inputType="text" />
+
+
+                    <TextView
+                        android:id="@+id/lblPredioInfoBasica"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="10dp"
+                        android:text="Predio"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <EditText
+                        android:id="@+id/txtPredioInfoBasica"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:ems="10"
+                        android:hint="Ingrese el predio"
+                        android:inputType="text" />
+
+
+                    <TextView
+                        android:id="@+id/lblVeredaInfoBasica"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="10dp"
+                        android:text="Vereda"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <EditText
+                        android:id="@+id/txtVeredaInfoBasica"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:ems="10"
+                        android:hint="Ingrese vereda"
+                        android:inputType="text" />
+
+
+                    <TextView
+                        android:id="@+id/lblMunicipio"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="10dp"
+                        android:text="Municipio"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+
+                    <EditText
+                        android:id="@+id/txtMunicipioInfoBasica"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:ems="10"
+                        android:hint="Ingrese el PK"
+                        android:inputType="text" />
+
+
+
+                    <TextView
+                        android:id="@+id/lblPkInfoBasica"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="10dp"
+                        android:text="PK"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <EditText
+                        android:id="@+id/txtPKInfoBasica"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:ems="10"
+                        android:hint="Ingrese el PK"
+                        android:inputType="text" />
+
+                    <TextView
+                        android:id="@+id/lblFuenteHidricaInfoBasica"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="10dp"
+                        android:text="Fuente hidrica"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <EditText
+                        android:id="@+id/txtFuenteHidricaInfoBasica"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:ems="10"
+                        android:hint="Ingrese la fuente hidrica asociada"
+                        android:inputType="text" />
+
+
+                    <TextView
+                        android:id="@+id/lblNivelesExcavacionInfoBasica"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="10dp"
+                        android:text="Niveles de excavacion"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <EditText
+                        android:id="@+id/txtNivelExcavacionInfoBasica"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:ems="10"
+                        android:hint="Ingrese los niveles de excavacion"
+                        android:inputType="number" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/CapaCaracteristicasGenerales"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:ems="10"
-                    android:hint="Profundidad 4"
-                    android:inputType="number" />
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/textView2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical|center"
+                        android:paddingTop="30dp"
+                        android:text="Caracteristicas generales del area"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/textView7"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="30dp"
+                        android:text="Elementos del paisaje"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+
+                    <Spinner
+                        android:id="@+id/spnPaisajeInfoBasica"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
+                    <TextView
+                        android:id="@+id/textView8"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="30dp"
+                        android:text="Microtopografia"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+
+                    <Spinner
+                        android:id="@+id/spnMicrotopografiaInfoBasica"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
+                    <TextView
+                        android:id="@+id/textView9"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="30dp"
+                        android:text="Cobertura vegetal"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <Spinner
+                        android:id="@+id/spnCoberturaVegetalInfoBasica"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/CapaDescripcionGeneral"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+
+                    <TextView
+                        android:id="@+id/textView3"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical|center"
+                        android:paddingTop="30dp"
+                        android:text="Descripcion general del sitio"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <EditText
+                        android:id="@+id/txtDescripcionSitioInfoBasica"
+                        android:layout_width="match_parent"
+                        android:layout_height="155dp"
+                        android:ems="10"
+                        android:hint="Ingrese la descripcion del sitio"
+                        android:inputType="textMultiLine" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/CapaEstadoDelSitio"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/textView4"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical|center"
+                        android:paddingTop="30dp"
+                        android:text="Estado del sitio"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+
+                    <TextView
+                        android:id="@+id/textView15"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingBottom="10dp"
+                        android:paddingTop="30dp"
+                        android:text="Factores de alteracion"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal">
+
+                        <CheckBox
+                            android:id="@+id/chkAgriculturaInfoBasica"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Agricultura" />
+
+                        <CheckBox
+                            android:id="@+id/chkGanaderiaInfoBasica"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Ganaderia" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal">
+
+                        <CheckBox
+                            android:id="@+id/chkErosionInfoBasica"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Erosion" />
+
+                        <CheckBox
+                            android:id="@+id/chkInundacionInfoBasica"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Inundacion" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal">
+
+                        <CheckBox
+                            android:id="@+id/chkGuaqueriaInfoBasica"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Guaqueria" />
+
+                        <CheckBox
+                            android:id="@+id/chkObraCivilInfoBasica"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Obra civil" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal">
+
+                        <CheckBox
+                            android:id="@+id/chkMovimientosMasivosInfoBasica"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Movimientos masivos" />
+
+                        <CheckBox
+                            android:id="@+id/chkOtroInfoBasica"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Otro" />
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/textView16"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="30dp"
+                        android:text="Grados de conservacion"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <Spinner
+                        android:id="@+id/spnConservacionInfoBasica"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
+                    <TextView
+                        android:id="@+id/textView5"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingBottom="30dp"
+                        android:paddingTop="30dp"
+                        android:gravity="center_vertical|center"
+                        android:text="Informacion del corte"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+
+                    <TextView
+                        android:id="@+id/lblWpInfoBasica"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="30dp"
+                        android:text="WP"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <EditText
+                        android:id="@+id/txtWPInfoBasica"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:ems="10"
+                        android:hint="Ingrese WP"
+                        android:inputType="text" />
+
+                    <Button
+                        android:id="@+id/btnCalcularCoordenadasInfoBasica"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Calcular  coordenadas"
+                        android:drawableBottom="@mipmap/ic_room_black_48dp"/>
+
+
+                    <TextView
+                        android:id="@+id/lblCoordenadaXInfoBasica"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="30dp"
+                        android:text="Coordenada X"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+
+                    <EditText
+                        android:id="@+id/txtCoordenadaXInfoBasica"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:ems="10"
+                        android:hint="Ingrese coordenada X"
+                        android:inputType="number" />
+
+
+                    <TextView
+                        android:id="@+id/lblCoordenadaYInfoBasica"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="30dp"
+                        android:text="Coordenada Y"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <EditText
+                        android:id="@+id/txtCoordenadaYInfoBasica"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:ems="10"
+                        android:hint="Ingrese coordenada Y"
+                        android:inputType="number" />
+
+                    <TextView
+                        android:id="@+id/lblResultado"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="10dp"
+                        android:text="Resultado"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <Spinner
+                        android:id="@+id/spnResultadoInfoBasica"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
+                    <TextView
+                        android:id="@+id/textView6"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingBottom="30dp"
+                        android:paddingTop="30dp"
+                        android:gravity="center_vertical|center"
+                        android:text="Profundidades iniciales"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/lblProfundidad1InfoBasica"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="30dp"
+                        android:text="Profundidad 1"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <EditText
+                        android:id="@+id/txtProfundidadInic1InfoBasica"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:ems="10"
+                        android:hint="Ingrese la profundidad 1"
+                        android:inputType="number" />
+
+
+                    <TextView
+                        android:id="@+id/lblProfundidad2InfoBasica"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="30dp"
+                        android:text="Profundidad 2"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <EditText
+                        android:id="@+id/txtProfundidadInic2InfoBasica"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:ems="10"
+                        android:hint="Ingrese la profundidad 2"
+                        android:inputType="number" />
+
+                    <TextView
+                        android:id="@+id/lblProfundidad3InfoBasica"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="30dp"
+                        android:text="Profundidad 3"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <EditText
+                        android:id="@+id/txtProfundidadInic3InfoBasica"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:ems="10"
+                        android:hint="Ingrese la profundidad 3"
+                        android:inputType="number" />
+
+
+                    <TextView
+                        android:id="@+id/lblProfundidad4InfoBasica"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="30dp"
+                        android:text="Profundidad 4"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <EditText
+                        android:id="@+id/txtProfundidadInic4InfoBasica"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:ems="10"
+                        android:hint="Ingrese la profundidad 4"
+                        android:inputType="number" />
+
+                </LinearLayout>
+
 
             </LinearLayout>
 
 
-        </LinearLayout>
-
-
-    </ScrollView>
+        </ScrollView>
+    </LinearLayout>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/btnfGuardarInfoBasica"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
-        android:layout_margin="24dp"
+        android:layout_margin="10dp"
         android:src="@mipmap/ic_save_white_48dp" />
 
 </FrameLayout>

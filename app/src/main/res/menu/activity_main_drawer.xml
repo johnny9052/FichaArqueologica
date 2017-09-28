@@ -4,15 +4,15 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/formulario_1"
-            android:icon="@drawable/ic_menu_gallery"
+            android:icon="@mipmap/ic_assignment_white_48dp"
             android:title="Ficha de registro" />
         <item
             android:id="@+id/formulario_2"
-            android:icon="@drawable/ic_menu_send"
+            android:icon="@mipmap/ic_list_white_48dp"
             android:title="Ver fichas" />
         <item
             android:id="@+id/formulario_3"
-            android:icon="@drawable/ic_menu_manage"
+            android:icon="@mipmap/ic_face_white_48dp"
             android:title="Informacion personal" />
     </group>
 

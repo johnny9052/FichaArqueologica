@@ -32,8 +32,10 @@ public class Ficha_Registro extends Fragment {
     private ViewPager viewPager;
 
 
+    /*Referencia objetos*/
     Helper helper;
     CtlFichasArqueologicas ficha;
+    /*END Referencia objetos*/
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -105,18 +107,24 @@ public class Ficha_Registro extends Fragment {
             /*Despues de que uno ingrese el primer extra el bundle deja de estar vacio, por lo que
             * puede ocurrir de que cuando acceda al extra edicion este no exista y genere error */
             prerararGestionDatosGuardar();
-            helper.mostrarMensaje("No se encontraron datos", getContext());
+            //helper.mostrarMensaje("No se encontraron datos", getContext());
         }
     }
 
 
+    /**
+     * Organiza los datos para un nuevo registro, reseteando todo el objeto
+     */
     public void prerararGestionDatosGuardar() {
-        helper.mostrarMensaje("lo reseteee",getContext());
+        //helper.mostrarMensaje("lo reseteee",getContext());
         ficha.resetControlador();
-        helper.mostrarMensaje("vamos a crear ", getContext());
+        //helper.mostrarMensaje("vamos a crear ", getContext());
     }
 
 
+    /**
+     * Organiza los datos para su respectiva edicion
+     */
     public void prepararGestionDatosEditar() {
         /*Como se va a editar, se establece que ya se ha registrado informacion basica
          * para habilitar las demas pestañas, y se elimina el extra de editar, para que
@@ -125,7 +133,7 @@ public class Ficha_Registro extends Fragment {
          * tendria esa variable si no se elimina*/
         ficha.infoBasicaRegistrada = true;
         getActivity().getIntent().removeExtra("edicion");
-        helper.mostrarMensaje("vamos a editar", getContext());
+        //helper.mostrarMensaje("vamos a editar", getContext());
     }
 
 

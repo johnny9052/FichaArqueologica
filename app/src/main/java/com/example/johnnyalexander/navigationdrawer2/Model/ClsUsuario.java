@@ -10,13 +10,15 @@ public class ClsUsuario {
     private String apellidos;
     private String correoElectronico;
     private String nombreProyecto;
+    private String municipio;
 
 
-    public ClsUsuario(String nombres, String apellidos, String correoElectronico, String nombreProyecto) {
+    public ClsUsuario(String nombres, String apellidos, String correoElectronico, String nombreProyecto, String municipio) {
         this.nombres = nombres;
         this.apellidos = apellidos;
         this.correoElectronico = correoElectronico;
         this.nombreProyecto = nombreProyecto;
+        this.municipio = municipio;
     }
 
     public String getNombres() {
@@ -50,4 +52,13 @@ public class ClsUsuario {
     public void setNombreProyecto(String nombreProyecto) {
         this.nombreProyecto = nombreProyecto;
     }
+
+    public String getMunicipio() {
+        return municipio;
+    }
+
+    public void setMunicipio(String municipio) {
+        this.municipio = municipio;
+    }
+
 }

@@ -25,11 +25,14 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
 
+    /*Referencias GUI*/
     FragmentManager fragmentManager;
-
     TextView txtNombreUsuarioNavigationDrawer, txtCorreoNavigationDrawer, txtProyectoNavigationDrawer;
+    /*END Referencias GUI*/
 
+    /*Referencia Persistencia*/
     SharedPreferences persistencia;
+    /*END Referencia Persistencia*/
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,29 +51,21 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-
-        Bundle bundle = getIntent().getExtras();
-        String fragmentDefecto = "";
-
-        try {
-            if (bundle != null) {
-                fragmentDefecto = bundle.getString("fragment");
-            }
-        } catch (Exception e) {
-
-        }
-
         /*Formulario que se carga por defecto*/
         fragmentManager = getSupportFragmentManager();
 
-        cargarFormularioPorDefecto(fragmentDefecto);
-
+        cargarFormularioPorDefecto();
         cargarInformacionUsuario(navigationView);
-
 
     }
 
+    /**
+     * Carga la informacion del usuario en el menu de navegacion
+     *
+     * @param navigationView Menu de navegacion de donde se va a actualizar la informacion
+     */
     public void cargarInformacionUsuario(NavigationView navigationView) {
+
 
         View headerView = navigationView.getHeaderView(0);
 
@@ -94,18 +89,32 @@ public class MainActivity extends AppCompatActivity
         }
 
         if (persistencia.getString("nombreProyecto", null) != null) {
-            txtCorreoNavigationDrawer.setText(persistencia.getString("nombreProyecto", null));
+            txtProyectoNavigationDrawer.setText(persistencia.getString("nombreProyecto", null));
         } else {
-            txtCorreoNavigationDrawer.setText("No existe proyecto");
+            txtProyectoNavigationDrawer.setText("No existe proyecto");
         }
 
 
     }
 
 
-    public void cargarFormularioPorDefecto(String fragment) {
+    /**
+     * Se carga el formulario - fragment por defecto, el cual si se solicita uno puntual se recibe
+     * mediante un extra. Por defecto carga el listado de fichas
+     */
+    public void cargarFormularioPorDefecto() {
+
+        Bundle bundle = getIntent().getExtras();
+
+        String fragmentDefecto = "";
+
         try {
-            switch (fragment) {
+
+            if (bundle != null) {
+                fragmentDefecto = bundle.getString("fragment");
+            }
+
+            switch (fragmentDefecto) {
                 case "registroFicha":
                     fragmentManager.beginTransaction().replace(R.id.masterLayout, new Ficha_Registro()).commit();
                     break;
@@ -116,8 +125,6 @@ public class MainActivity extends AppCompatActivity
         } catch (Exception e) {
             fragmentManager.beginTransaction().replace(R.id.masterLayout, new Lista_Fichas()).commit();
         }
-
-
     }
 
     @Override

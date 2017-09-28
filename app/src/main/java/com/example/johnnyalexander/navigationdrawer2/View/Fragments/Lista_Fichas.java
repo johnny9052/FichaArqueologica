@@ -70,49 +70,68 @@ public class Lista_Fichas extends Fragment {
 
         ArrayList<String> listaPublica = configurarListaPublica();
 
+        if (listaPublica.size() == 0) {
+            listaPublica.add("No se han añadido fichas");
+        }
+
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),
                 android.R.layout.simple_list_item_1, listaPublica.toArray(new String[listaPublica.size()]));
 
         lstFichas.setAdapter(adapter);
 
-        lstFichas.setOnItemClickListener
-                (new AdapterView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> parent, View v,
-                                            int posicion, long id) {
+        if (ficha.fichas.size() > 0) {
+            lstFichas.setOnItemClickListener
+                    (new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> parent, View v,
+                                                int posicion, long id) {
 
-                        String archivo = listadoNombreArchivos[posicion];
-                        String fichaTemp = "";
+                            String archivo = listadoNombreArchivos[posicion];
+                            String fichaTemp = "";
 
-                        try {
+                            try {
                             /*Se obtiene toda la informacion de la ficha seleccionada, y se almacena
                             * en la variable statica del controlador*/
-                            fichaTemp = helper.archivoTextoCargarContenidoPorNombre(archivo, "json", getContext());
-                            ficha.fichaTemporal =helper.JSON_JSONToObjectFichaArqueologica(fichaTemp);
+                                fichaTemp = helper.archivoTextoCargarContenidoPorNombre(archivo, "json", getContext());
+                                ficha.fichaTemporal = helper.JSON_JSONToObjectFichaArqueologica(fichaTemp);
 
                             /*Se envian 2 extras, el primero indica que se debe cargar el fragment
                             * de ficha de registro, debido a que se va a editar. El segundo indica
                             * que se va a editar sobre el formulario, no a crear un nuevo registro*/
-                            Intent intent = new Intent(getActivity(), MainActivity.class);
-                            intent.putExtra("fragment","registroFicha");
-                            intent.putExtra("edicion","true");
-                            startActivity(intent);
+                                Intent intent = new Intent(getActivity(), MainActivity.class);
+                                intent.putExtra("fragment", "registroFicha");
+                                intent.putExtra("edicion", "true");
+                                startActivity(intent);
                             /*Se cierra la activity actual*/
-                            getActivity().finish();
+                                getActivity().finish();
 
-                        } catch (IOException e) {
-                            e.printStackTrace();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+
                         }
+                    });
 
-                    }
-                });
+
+            lstFichas.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+                @Override
+                public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
+                                               int pos, long id) {
+
+                    helper.mostrarMensaje("Largo!!!", getContext());
+
+                    return true;
+                }
+            });
+
+        }
+
 
     }
 
 
     /**
-     *
      * Recorre cada uno de los archivos encontrados, y saca la informacion necesaria que sera
      * mostrada en el listview para identificar cada registro. Ademas en un array global almacena
      * el nombre de cada archivo, para poder cargar posteriormente el archivo seleccionado en el

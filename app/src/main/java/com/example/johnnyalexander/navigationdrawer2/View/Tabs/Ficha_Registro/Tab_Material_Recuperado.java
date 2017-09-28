@@ -69,7 +69,7 @@ public class Tab_Material_Recuperado extends Fragment {
         }
 
         if (listaPublica.size() == 0) {
-            listaPublica.add("No se han añadido registros");
+            listaPublica.add("No se ha añadido material");
         }
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),
@@ -77,19 +77,21 @@ public class Tab_Material_Recuperado extends Fragment {
 
         lstTipoMaterialRecuperado.setAdapter(adapter);
 
-        lstTipoMaterialRecuperado.setOnItemClickListener
-                (new AdapterView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> parent, View v,
-                                            int posicion, long id) {
+        if (ficha.fichaTemporal.materialesRecuperados.size() > 0) {
+            lstTipoMaterialRecuperado.setOnItemClickListener
+                    (new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> parent, View v,
+                                                int posicion, long id) {
 
-                        ClsMaterialRecuperado temp = ficha.fichaTemporal.materialesRecuperados.get(posicion);
-                        abrirDialog(v, temp, posicion);
+                            ClsMaterialRecuperado temp = ficha.fichaTemporal.materialesRecuperados.get(posicion);
+                            abrirDialog(v, temp, posicion);
 
-                    }
-                });
+                        }
+                    });
+
+        }
     }
-
 
 
     public void configuracionListeners() {
@@ -104,7 +106,6 @@ public class Tab_Material_Recuperado extends Fragment {
     public void configuracionGUI() {
 
     }
-
 
 
     public void abrirDialog(View view, ClsMaterialRecuperado temp, int pos) {

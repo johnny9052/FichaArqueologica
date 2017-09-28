@@ -6,12 +6,15 @@ import android.location.Location;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.Spinner;
 
 
@@ -24,17 +27,21 @@ import java.io.IOException;
 
 public class Tab_Informacion_Basica extends Fragment {
 
+    /*Referencia objetos*/
     Helper helper;
     CtlFichasArqueologicas ficha;
+    /*END Referencia objetos*/
+
+    /*Referencia persistencia*/
     SharedPreferences persistencia;
+    /*END Referencia persistencia*/
 
     /*Elementos GUI*/
-
     EditText txtNumeroSitioInfoBasica, txtPredioInfoBasica, txtVeredaInfoBasica, txtPKInfoBasica,
             txtProfesionalInfoBasica, txtFuenteHidricaInfoBasica, txtCorteInfoBasica,
             txtNivelExcavacionInfoBasica, txtDescripcionSitioInfoBasica, txtWPInfoBasica,
             txtProfundidadInic1InfoBasica, txtProfundidadInic2InfoBasica, txtProfundidadInic3InfoBasica,
-            txtProfundidadInic4InfoBasica, txtCoordenadaX, txtCoordenadaY;
+            txtProfundidadInic4InfoBasica, txtCoordenadaX, txtCoordenadaY, txtMunicipio;
 
     CheckBox chkAgriculturaInfoBasica, chkGanaderiaInfoBasica, chkErosionInfoBasica, chkInundacionInfoBasica,
             chkGuaqueriaInfoBasica, chkObraCivilInfoBasica, chkMovimientosMasivosInfoBasica, chkOtroInfoBasica;
@@ -43,9 +50,10 @@ public class Tab_Informacion_Basica extends Fragment {
 
     FloatingActionButton btnfGuardarInfoBasica;
 
-    Spinner spnMunicipios, spnPaisaje, spnMicrotopografia, spnCoberturaVegetal,
+    Spinner spnPaisaje, spnMicrotopografia, spnCoberturaVegetal,
             spnConservacion, spnResultado;
 
+    ScrollView scrollInformacionBasica;
     /*END Elementos GUI*/
 
 
@@ -62,7 +70,6 @@ public class Tab_Informacion_Basica extends Fragment {
         configuracionListeners();
         verificarDatos();
 
-
         return view;
     }
 
@@ -73,12 +80,14 @@ public class Tab_Informacion_Basica extends Fragment {
     public void verificarDatos() {
 
         /*Se verifica el nombre registrado en la aplicacion para ponerlo como profesional por
-        * defecto*/
+        * defecto y el municipio*/
         persistencia = getActivity().getSharedPreferences("ClsUsuario", Context.MODE_PRIVATE);
 
-        if (persistencia.getString("nombres", null) != null) {
+        if (persistencia.getString("nombres", null) != null && persistencia.getString("nombres", "") != null) {
             txtProfesionalInfoBasica.setText(persistencia.getString("nombres", "") + " " +
                     persistencia.getString("apellidos", ""));
+
+            txtMunicipio.setText(persistencia.getString("municipioProyecto", ""));
         }
 
 
@@ -98,14 +107,12 @@ public class Tab_Informacion_Basica extends Fragment {
 
     public void configuracionListeners() {
         /*Actions - Listener*/
-
         btnCalcularCoordenadas.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 calcularCoordenadas();
             }
         });
-
 
         btnfGuardarInfoBasica.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -122,16 +129,26 @@ public class Tab_Informacion_Basica extends Fragment {
 
 
     //https://www.codota.com/android/scenarios/52fcbdd6da0a6fdfa46309f0/finding-current-location?tag=dragonfly
+
+    /**
+     * Calcula las coordenadas y las carga en los campos de coordenadas
+     */
     public void calcularCoordenadas() {
         Location loc = helper.gpsCalcularCoordenadas(getActivity(), getContext());
         if (loc != null) {
             txtCoordenadaX.setText((loc.getLatitude()) + "");
             txtCoordenadaY.setText((loc.getLongitude()) + "");
-            helper.mostrarMensaje("Coordenadas calculadas", getActivity());
+            helper.mostrarMensajeInferiorPantalla("Coordenadas calculadas",getView());
         }
     }
 
 
+    /**
+     *
+     * Asocia los elementos de la interfaz grafica, carga combos y prepara otros componentes
+     *
+     * @param view Vista con los elementos que seran asociados
+     */
     public void configuracionGUI(View view) {
 
          /*Referencias GUI*/
@@ -154,7 +171,7 @@ public class Tab_Informacion_Basica extends Fragment {
         txtCoordenadaX = (EditText) view.findViewById(R.id.txtCoordenadaXInfoBasica);
         txtCoordenadaY = (EditText) view.findViewById(R.id.txtCoordenadaYInfoBasica);
 
-        spnMunicipios = (Spinner) view.findViewById(R.id.spnMunicipioInfoBasica);
+        txtMunicipio = (EditText) view.findViewById(R.id.txtMunicipioInfoBasica);
         spnPaisaje = (Spinner) view.findViewById(R.id.spnPaisajeInfoBasica);
         spnMicrotopografia = (Spinner) view.findViewById(R.id.spnMicrotopografiaInfoBasica);
         spnCoberturaVegetal = (Spinner) view.findViewById(R.id.spnCoberturaVegetalInfoBasica);
@@ -175,19 +192,33 @@ public class Tab_Informacion_Basica extends Fragment {
         chkObraCivilInfoBasica = (CheckBox) view.findViewById(R.id.chkObraCivilInfoBasica);
         chkMovimientosMasivosInfoBasica = (CheckBox) view.findViewById(R.id.chkMovimientosMasivosInfoBasica);
         chkOtroInfoBasica = (CheckBox) view.findViewById(R.id.chkOtroInfoBasica);
+
+        scrollInformacionBasica = (ScrollView) view.findViewById(R.id.scrollInformacionBasica);
+
+        /*Se habilita para que el scroll se pueda mover en cualquier momento, es decir a cambiarle
+        * el focus en cualquier momento*/
+        scrollInformacionBasica.requestFocus(View.FOCUS_UP);
         /*END Referencias GUI*/
 
 
         /*Carga de Spinners*/
-        helper.spinnerCargarDatos(getActivity(), helper.getMunicipios(), spnMunicipios);
+        //helper.spinnerCargarDatos(getActivity(), helper.getMunicipios(), txtMunicipio);
         helper.spinnerCargarDatos(getActivity(), helper.getPaisajes(), spnPaisaje);
         helper.spinnerCargarDatos(getActivity(), helper.getMicrotopografia(), spnMicrotopografia);
         helper.spinnerCargarDatos(getActivity(), helper.getCoberturaVegetal(), spnCoberturaVegetal);
         helper.spinnerCargarDatos(getActivity(), helper.getGradoConservacion(), spnConservacion);
         helper.spinnerCargarDatos(getActivity(), helper.getResultado(), spnResultado);
+        /*END Carga de Spinners*/
     }
 
 
+    /**
+     *
+     * Guarda la informacion basica de una ficha arqueologica
+     *
+     * @param view Vista con los elementos donde se obtendran los datos
+     * @throws IOException
+     */
     public void guardarInformacionBasica(View view) throws IOException {
 
         if (helper.editTextValidarObligatorioMensaje(txtNumeroSitioInfoBasica) &&
@@ -198,7 +229,7 @@ public class Tab_Informacion_Basica extends Fragment {
             ficha.fichaTemporal.basica.setCorte(txtCorteInfoBasica.getText().toString());
             ficha.fichaTemporal.basica.setPredio(txtPredioInfoBasica.getText().toString());
             ficha.fichaTemporal.basica.setVereda(txtVeredaInfoBasica.getText().toString());
-            ficha.fichaTemporal.basica.setMunicipio(spnMunicipios.getSelectedItem().toString());
+            ficha.fichaTemporal.basica.setMunicipio(txtMunicipio.getText().toString());
             ficha.fichaTemporal.basica.setPk(txtPKInfoBasica.getText().toString());
             ficha.fichaTemporal.basica.setFuenteHidrica(txtFuenteHidricaInfoBasica.getText().toString());
             ficha.fichaTemporal.basica.setNivelesExcavacion(helper.editTextValidarNumeroEntero(txtNivelExcavacionInfoBasica));
@@ -237,13 +268,18 @@ public class Tab_Informacion_Basica extends Fragment {
             }
         } else {
             helper.mostrarMensajeInferiorPantalla("Verifique los campos obligatorios", getView());
+            /*Se hace focus en la parte superior de la pantalla*/
+            scrollInformacionBasica.scrollTo(0, 0);
         }
     }
 
 
+    /**
+     * Carga informacion si existe previamente para su respectiva edicion
+     */
     public void cargarDatos() {
 
-        helper.mostrarMensaje("Cargar datos info basica", getContext());
+        //helper.mostrarMensaje("Cargar datos info basica", getContext());
 
         txtProfesionalInfoBasica.setText(ficha.fichaTemporal.basica.getNombreProfesional());
         txtNumeroSitioInfoBasica.setText(helper.numeroValidarCargaObligatorio(ficha.fichaTemporal.basica.getNumeroSitio()));
@@ -262,7 +298,7 @@ public class Tab_Informacion_Basica extends Fragment {
         txtProfundidadInic3InfoBasica.setText(helper.numeroValidarCargaObligatorio(ficha.fichaTemporal.basica.getProfundidad3()));
         txtProfundidadInic4InfoBasica.setText(helper.numeroValidarCargaObligatorio(ficha.fichaTemporal.basica.getProfundidad4()));
 
-        spnMunicipios.setSelection(helper.spinnerObtenerPosicionValor(spnMunicipios, ficha.fichaTemporal.basica.getMunicipio()));
+        txtMunicipio.setText(ficha.fichaTemporal.basica.getMunicipio());
 
         spnResultado.setSelection(helper.spinnerObtenerPosicionValor(spnResultado, ficha.fichaTemporal.basica.getResultado()));
         spnCoberturaVegetal.setSelection(helper.spinnerObtenerPosicionValor(spnCoberturaVegetal, ficha.fichaTemporal.basica.getCoverturaVegetal()));
