@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -55,10 +56,7 @@ public class Tab_Estatigrafia extends Fragment {
     }
 
 
-    /**
-     * Carga en el listview el listado de todas las estratigrafias
-     */
-    public void cargarListadoEstratigrafias() {
+    public ArrayList<String> configurarListaPublica(){
 
         ArrayList<String> listaPublica = new ArrayList<String>();
 
@@ -69,6 +67,18 @@ public class Tab_Estatigrafia extends Fragment {
         if (listaPublica.size() == 0) {
             listaPublica.add("No se han añadido estratigrafias");
         }
+
+        return  listaPublica;
+    }
+
+
+    /**
+     * Carga en el listview el listado de todas las estratigrafias
+     */
+    public void cargarListadoEstratigrafias() {
+
+        final ArrayList<String> listaPublica = configurarListaPublica();
+
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),
                 android.R.layout.simple_list_item_1, listaPublica.toArray(new String[listaPublica.size()]));
@@ -91,9 +101,35 @@ public class Tab_Estatigrafia extends Fragment {
             lstEstratigrafias.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
                 @Override
                 public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
-                                               int pos, long id) {
+                                               final int pos, long id) {
+                    new AlertDialog.Builder(getActivity())
+                            //.setIcon(android.R.drawable.ic_dialog_alert)
+                            .setTitle("Eliminar estratigrafia")
+                            .setMessage("¿Esta seguro que desea eliminar el registro "+ listaPublica.get(pos)+"?")
+                            .setPositiveButton("Si", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    try {
 
-                    helper.mostrarMensaje("Largo!!!", getContext());
+                                        ficha.fichaTemporal.estratigrafias.remove(pos);
+                                        String json = helper.JSON_ObjetoToJSON(ficha.fichaTemporal);
+                                        String nombreArchivo = helper.nombreArchivo(ficha.fichaTemporal);
+
+                                        if (helper.ArchivoTextoCrear(json, nombreArchivo, getContext(), "json")) {
+                                            helper.mostrarMensaje("Eliminado correctamente", getContext());
+                                            cargarListadoEstratigrafias();
+                                        } else {
+                                            helper.mostrarMensaje("Error al almacenar la eliminacion, por favor refresque el formulario", getContext());
+                                        }
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+
+                            })
+                            .setNegativeButton("No", null)
+                            .show();
+
 
                     return true;
                 }

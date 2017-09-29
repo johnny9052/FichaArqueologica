@@ -333,6 +333,26 @@ public class Helper extends Data {
     }
 
 
+
+
+    /**
+     * Elimina el archivo de texto almacenado en la carpeta Android/data
+     *
+     * @param nombreArchivo Nombre del archivo que sera eliminado
+     * @param formato       Formato del archivo que sera eliminado
+     * @param context       Contexto que ejecuta la funcion
+     * @return True si elimino el archivo, false si no
+     * @throws IOException
+     */
+    public boolean archivoTextoEliminarPorNombre(String nombreArchivo, String formato, Context context) throws IOException {
+
+        File path = context.getExternalFilesDir(null);
+        File file = new File(path, nombreArchivo + "." + formato);
+
+        return file.delete();
+    }
+
+
     /**
      * Retorna el contenido de un archivo de texto enviado por parametro
      *

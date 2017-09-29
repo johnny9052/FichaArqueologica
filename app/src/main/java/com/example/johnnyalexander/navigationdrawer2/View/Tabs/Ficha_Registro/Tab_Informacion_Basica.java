@@ -126,7 +126,7 @@ public class Tab_Informacion_Basica extends Fragment {
             @Override
             public void onClick(View view) {
                 try {
-                    guardarInformacionBasica(view,true);
+                    guardarInformacionBasica(view, true);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -143,8 +143,8 @@ public class Tab_Informacion_Basica extends Fragment {
      */
     public void calcularCoordenadas(View view) {
 
-        if(permisos.verificarPermiso(Manifest.permission.ACCESS_FINE_LOCATION,permisos.LOCATION,getActivity())) {
-            Location loc = helper.gpsCalcularCoordenadas(getActivity(), getContext(),view);
+        if (permisos.verificarPermiso(Manifest.permission.ACCESS_FINE_LOCATION, permisos.LOCATION, getActivity())) {
+            Location loc = helper.gpsCalcularCoordenadas(getActivity(), getContext(), view);
             if (loc != null) {
                 txtCoordenadaX.setText((loc.getLatitude()) + "");
                 txtCoordenadaY.setText((loc.getLongitude()) + "");
@@ -155,7 +155,6 @@ public class Tab_Informacion_Basica extends Fragment {
 
 
     /**
-     *
      * Asocia los elementos de la interfaz grafica, carga combos y prepara otros componentes
      *
      * @param view Vista con los elementos que seran asociados
@@ -224,10 +223,9 @@ public class Tab_Informacion_Basica extends Fragment {
 
 
     /**
-     *
      * Guarda la informacion basica de una ficha arqueologica
      *
-     * @param view Vista con los elementos donde se obtendran los datos
+     * @param view    Vista con los elementos donde se obtendran los datos
      * @param mensaje Indica si se debe de mostrar mensajes al intententar guardar o no
      * @throws IOException
      */
@@ -272,8 +270,12 @@ public class Tab_Informacion_Basica extends Fragment {
             String nombreArchivo = helper.nombreArchivo(ficha.fichaTemporal);
 
             if (helper.ArchivoTextoCrear(json, nombreArchivo, getContext(), "json")) {
-                if(mensaje){
+                if (mensaje) {
                     helper.mostrarMensajeInferiorPantalla("Almacenado correctamente", view);
+
+                    /*Se bloqueda la informacion primaria no modificable*/
+                    txtNumeroSitioInfoBasica.setEnabled(false);
+                    txtCorteInfoBasica.setEnabled(false);
                 }
                 /*Indicamos que ya se pueden guardar las otras pestañas*/
                 ficha.infoBasicaRegistrada = true;
@@ -281,7 +283,7 @@ public class Tab_Informacion_Basica extends Fragment {
                 helper.mostrarMensajeInferiorPantalla("Error al almacenar", view);
             }
         } else {
-            if(mensaje){
+            if (mensaje) {
                 helper.mostrarMensajeInferiorPantalla("Verifique los campos obligatorios", getView());
                 /*Se hace focus en la parte superior de la pantalla*/
                 scrollInformacionBasica.scrollTo(0, 0);
@@ -331,11 +333,14 @@ public class Tab_Informacion_Basica extends Fragment {
         chkMovimientosMasivosInfoBasica.setChecked(ficha.fichaTemporal.basica.isMovimientosMasivosFactorAlteracion());
         chkOtroInfoBasica.setChecked(ficha.fichaTemporal.basica.isOtroFactorAlteracion());
 
+        /*Se bloqueda la informacion primaria no modificable*/
+        txtNumeroSitioInfoBasica.setEnabled(false);
+        txtCorteInfoBasica.setEnabled(false);
+
     }
 
 
     /**
-     *
      * Funcion que se ejecuta cuando el fragment deja de estar visible
      *
      * @param isVisibleToUser
@@ -348,7 +353,7 @@ public class Tab_Informacion_Basica extends Fragment {
             if (getView() != null) {
                 try {
                     //Log.e("**************", "Entreeeeeeeee");
-                    guardarInformacionBasica(getView(),false);
+                    guardarInformacionBasica(getView(), false);
                 } catch (IOException e) {
                     //Log.e("**************", "Entreeeeeeeee con error");
                     e.printStackTrace();

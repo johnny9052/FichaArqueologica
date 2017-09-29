@@ -1,6 +1,7 @@
 package com.example.johnnyalexander.navigationdrawer2;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
@@ -8,6 +9,7 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -127,14 +129,30 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+
+    /**
+     * Funcion que se ejecuta cuando se trata de cerrar la aplicacion presionando el boton de atras
+     */
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
-        }
+        new AlertDialog.Builder(this)
+                //.setIcon(android.R.drawable.ic_dialog_alert)
+                .setTitle("Salir de la aplicacion")
+                .setMessage("¿Esta seguro que desea salir de la aplicacion?")
+                .setPositiveButton("Si", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+                        if (drawer.isDrawerOpen(GravityCompat.START)) {
+                            drawer.closeDrawer(GravityCompat.START);
+                        } else {
+                            //super.onBackPressed();
+                        }
+                    }
+
+                })
+                .setNegativeButton("No", null)
+                .show();
     }
 
     @Override

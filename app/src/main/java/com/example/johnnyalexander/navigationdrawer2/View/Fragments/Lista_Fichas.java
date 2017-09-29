@@ -1,9 +1,13 @@
 package com.example.johnnyalexander.navigationdrawer2.View.Fragments;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,6 +49,10 @@ public class Lista_Fichas extends Fragment {
      * Funcion que obtiene todos los archivos almacenados y que seran listados
      */
     public void cargarListadoFichas() {
+
+        /*Limpiamos si existen fichas previas*/
+        ficha.fichas.clear();
+
         File[] files = helper.ArchivosListarExistentes(getContext(), "");
         String contenido;
 
@@ -62,13 +70,24 @@ public class Lista_Fichas extends Fragment {
     }
 
 
+    public void limpiarListView(ListView listview) {
+        ArrayList<String> values = new ArrayList<String>();
+        values.clear();
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),
+                android.R.layout.simple_list_item_1, values.toArray(new String[values.size()]));
+        listview.setAdapter(adapter);
+    }
+
+
     /**
      * Obtiene el texto que se mostrara en el listview, se lo asigna a este y define el listener para
      * dicho listview
      */
     public void listarFichasListView() {
 
-        ArrayList<String> listaPublica = configurarListaPublica();
+
+        final ArrayList<String> listaPublica = configurarListaPublica();
 
         if (listaPublica.size() == 0) {
             listaPublica.add("No se han añadido fichas");
@@ -81,6 +100,7 @@ public class Lista_Fichas extends Fragment {
         lstFichas.setAdapter(adapter);
 
         if (ficha.fichas.size() > 0) {
+
             lstFichas.setOnItemClickListener
                     (new AdapterView.OnItemClickListener() {
                         @Override
@@ -119,7 +139,38 @@ public class Lista_Fichas extends Fragment {
                 public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
                                                int pos, long id) {
 
-                    helper.mostrarMensaje("Largo!!!", getContext());
+                    //helper.mostrarMensaje("Largo!!!", getContext());
+                    final String archivo = listadoNombreArchivos[pos];
+                    String fichaTemp = "";
+
+                    new AlertDialog.Builder(getActivity())
+                            //.setIcon(android.R.drawable.ic_dialog_alert)
+                            .setTitle("Eliminar ficha")
+                            .setMessage("¿Esta seguro que desea eliminar la ficha " + listaPublica.get(pos) +"?")
+                            .setPositiveButton("Si", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+
+                                    try {
+
+                                        /*Se elimina la ficha*/
+                                        if (helper.archivoTextoEliminarPorNombre(archivo, "json", getContext())) {
+                                            helper.mostrarMensajeInferiorPantalla("Ficha eliminada", getView());
+                                            cargarListadoFichas();
+                                        } else {
+                                            helper.mostrarMensajeInferiorPantalla("La ficha no se pudo eliminar", getView());
+                                        }
+
+
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+
+                            })
+                            .setNegativeButton("No", null)
+                            .show();
+
 
                     return true;
                 }
