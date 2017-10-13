@@ -64,9 +64,7 @@ public class Lista_Fichas extends Fragment {
                 e.printStackTrace();
             }
         }
-
         listarFichasListView();
-
     }
 
 

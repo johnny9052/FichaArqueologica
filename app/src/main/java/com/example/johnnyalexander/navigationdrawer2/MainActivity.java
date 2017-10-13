@@ -116,10 +116,24 @@ public class MainActivity extends AppCompatActivity
                 fragmentDefecto = bundle.getString("fragment");
             }
 
+            persistencia = getSharedPreferences("ClsUsuario", Context.MODE_PRIVATE);
+
+            String xxx = persistencia.getString("nombres", null);
+
+            if (persistencia.getString("nombres", null) == null || persistencia.getString("nombres", "").equals("")) {
+                fragmentDefecto = "informacionPersonal";
+            }
+
+
             switch (fragmentDefecto) {
                 case "registroFicha":
                     fragmentManager.beginTransaction().replace(R.id.masterLayout, new Ficha_Registro()).commit();
                     break;
+
+                case "informacionPersonal":
+                    fragmentManager.beginTransaction().replace(R.id.masterLayout, new Informacion_Personal()).commit();
+                    break;
+
                 default:
                     fragmentManager.beginTransaction().replace(R.id.masterLayout, new Lista_Fichas()).commit();
                     break;
@@ -148,6 +162,8 @@ public class MainActivity extends AppCompatActivity
                         } else {
                             //super.onBackPressed();
                         }
+
+                        finish();
                     }
 
                 })

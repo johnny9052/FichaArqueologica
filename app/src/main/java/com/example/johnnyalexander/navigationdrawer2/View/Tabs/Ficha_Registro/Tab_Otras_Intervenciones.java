@@ -1,30 +1,49 @@
 package com.example.johnnyalexander.navigationdrawer2.View.Tabs.Ficha_Registro;
 
 import android.Manifest;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.media.Image;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageSwitcher;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.ViewSwitcher;
 
 import com.example.johnnyalexander.navigationdrawer2.Controller.CtlFichasArqueologicas;
 import com.example.johnnyalexander.navigationdrawer2.Infraestructure.Helper;
 import com.example.johnnyalexander.navigationdrawer2.Infraestructure.Permisos;
+import com.example.johnnyalexander.navigationdrawer2.MainActivity;
+import com.example.johnnyalexander.navigationdrawer2.Model.ClsEstratigrafia;
 import com.example.johnnyalexander.navigationdrawer2.R;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.ArrayList;
 
 import static android.app.Activity.RESULT_OK;
@@ -32,13 +51,17 @@ import static android.app.Activity.RESULT_OK;
 
 public class Tab_Otras_Intervenciones extends Fragment {
 
+
     /*Referencia objetos*/
     Helper helper;
     CtlFichasArqueologicas ficha;
     Permisos permisos;
+    /*Ruta completa de la ultima imagen tomada*/
+    Uri imageUri;
     /*END Referencia objetos*/
 
     /*Elementos GUI*/
+
     EditText txtFechaInicioOtrasIntervenciones, txtFechaFinOtrasIntervenciones;
 
     EditText txtNumeroAmpliacionesOtrasIntervenciones, txtDescripcionGeneralAmpliacionesOtrasIntervenciones, txtCorteAreaNomenclaturaOtrasIntervenciones,
@@ -51,21 +74,20 @@ public class Tab_Otras_Intervenciones extends Fragment {
     CheckBox chkSuperiorOtrasIntervenciones, chkInferiorOtrasIntervenciones, chkDerechaOtrasIntervenciones,
             chkIzquierdaOtrasIntervenciones;
 
-    Button btnTomarFotografia1, btnTomarFotografia2;
+    Button btnTomarFotografia;
 
 
     RadioGroup rdgApliacionOtrasIntervenciones, rdgCorteAreaOtrasIntervenciones, rdgTrincheraOtrasIntervenciones;
 
-    ImageView imgView1, imgView2;
-
     FloatingActionButton btnfGuardarOtrasIntervenciones;
+
+    ListView lstFotografiasOtrasIntervenciones;
+
     /*END Elementos GUI*/
 
 
     /*Codigo de respuesta para el actionResult de la fotografia*/
     static final int REQUEST_IMAGE_CAPTURE = 1;
-    /*Numero de la foto*/
-    int numberPhoto;
 
 
     @Override
@@ -104,18 +126,10 @@ public class Tab_Otras_Intervenciones extends Fragment {
         helper.editTextToCalendar(txtFechaFinOtrasIntervenciones, getActivity());
 
          /*Actions - Listener*/
-        btnTomarFotografia1.setOnClickListener(new View.OnClickListener() {
+        btnTomarFotografia.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                tomarFoto(1);
-            }
-        });
-
-
-        btnTomarFotografia2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                tomarFoto(2);
+                tomarFoto();
             }
         });
 
@@ -168,8 +182,7 @@ public class Tab_Otras_Intervenciones extends Fragment {
         txtFechaInicioOtrasIntervenciones = (EditText) view.findViewById(R.id.txtFechaInicioOtrasIntervenciones);
         txtFechaFinOtrasIntervenciones = (EditText) view.findViewById(R.id.txtFechaFinOtrasIntervenciones);
 
-        btnTomarFotografia1 = (Button) view.findViewById(R.id.btnTomarFoto1);
-        btnTomarFotografia2 = (Button) view.findViewById(R.id.btnTomarFoto2);
+        btnTomarFotografia = (Button) view.findViewById(R.id.btnTomarFoto);
 
         rdgApliacionOtrasIntervenciones = (RadioGroup) view.findViewById(R.id.rdgApliacionOtrasIntervenciones);
         rdgCorteAreaOtrasIntervenciones = (RadioGroup) view.findViewById(R.id.rdgCorteAreaOtrasIntervenciones);
@@ -178,10 +191,12 @@ public class Tab_Otras_Intervenciones extends Fragment {
 
         btnfGuardarOtrasIntervenciones = (FloatingActionButton) view.findViewById(R.id.btnfGuardarOtrasIntervenciones);
 
-        imgView1 = (ImageView) view.findViewById(R.id.imgView1);
-        imgView2 = (ImageView) view.findViewById(R.id.imgView2);
+        lstFotografiasOtrasIntervenciones = (ListView) view.findViewById(R.id.lstFotografiasOtrasIntervenciones);
+
         /*END Referencias GUI*/
+
     }
+
 
     /**
      * Guarda la informacion basica de otras intervensiones
@@ -238,36 +253,162 @@ public class Tab_Otras_Intervenciones extends Fragment {
 
     /**
      * Activa la camara y retorna la imagen tomada en un actionResult
-     *
-     * @param numberPhoto
      */
-    public void tomarFoto(int numberPhoto) {
-        this.numberPhoto = numberPhoto;
+    public void tomarFoto() {
 
-        String nombreArchivo = "imagen.jpg";
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        //File foto = new File(getActivity().getExternalFilesDir(null),nombreArchivo);
-        //intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(foto));
-        //startActivity(intent);
-        if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
-            startActivityForResult(intent, REQUEST_IMAGE_CAPTURE);
+        if (ficha.infoBasicaRegistrada) {
+
+            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
+            /*Para mandar la foto desde antes de abrir la camara*/
+            //File foto = new File(getActivity().getExternalFilesDir(null)+"/Imagenes/", ficha.fichaTemporal.basica.getNumeroSitio()+"-"+ficha.fichaTemporal.basica.getCorte());
+            //if (!foto.exists()) {
+            //foto.mkdirs();
+            //}
+
+            /*Nos paramos en la carpeta de Android/data*/
+            File path = getContext().getExternalFilesDir(null);
+            /*Dentro de android/data apuntamos en memoria a la ruta imagenes/numeroSitio-corte*/
+            File file = new File(path + "/Imagenes/", ficha.fichaTemporal.basica.getNumeroSitio() + "-" + ficha.fichaTemporal.basica.getCorte());
+            /*Si el archivo apuntando en memoria no existe creamos las carpetas*/
+            if (!file.exists()) {
+                file.mkdirs();
+            }
+            /*Ya con la ruta creada ahora si creamos la imagen que contendra lo tomado por la camara*/
+            File foto = new File(path + "/Imagenes/" + ficha.fichaTemporal.basica.getNumeroSitio() + "-" + ficha.fichaTemporal.basica.getCorte() + "/",
+                    System.currentTimeMillis() + ".jpg");
+
+            imageUri = Uri.fromFile(foto);
+
+            intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(foto));
+            /*END Para mandar la foto desde antes de abrir la camara*/
+
+            if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
+                startActivityForResult(intent, REQUEST_IMAGE_CAPTURE);
+            }
+        } else {
+            helper.mostrarMensaje("Primero debe almacenar la informacion basica", getContext());
         }
     }
 
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-            Bundle extras = data.getExtras();
-            Bitmap imageBitmap = (Bitmap) extras.get("data");
 
-            if (numberPhoto == 1) {
-                imgView1.setImageBitmap(imageBitmap);
-            } else {
-                imgView2.setImageBitmap(imageBitmap);
+        /*Si la respuesta es de la fotografia*/
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+            helper.mostrarMensajeInferiorPantalla("Fotografia tomada", getView());
+
+            ficha.fichaTemporal.otras.getFotografias().add(imageUri.getPath());
+
+            try {
+                guardarOtrasIntervenciones(getView(), false);
+            } catch (IOException e) {
+                e.printStackTrace();
             }
+
+            btnTomarFotografia.requestFocus();
+
+            cargarListadoFotos();
+            /*Para obtener el Thump de la imagen, es decir en la minima calidad*/
+            //Bundle extras = data.getExtras();
+            //Bitmap bitmap = (Bitmap) extras.get("data");
+            //imgView1.setImageBitmap(bitmap);
+            //saveImageFile(bitmap);
+            /*END Para obtener el Thump de la imagen, es decir en la minima calidad*/
         }
     }
+
+
+    public ArrayList<String> configurarListaPublicaFotografias() {
+
+        ArrayList<String> listaPublica = new ArrayList<String>();
+
+        for (int i = 0; i < ficha.fichaTemporal.otras.getFotografias().size(); i++) {
+            listaPublica.add("Fotografia no: " + (i + 1));
+        }
+
+        if (listaPublica.size() == 0) {
+            listaPublica.add("No se han tomado fotos");
+        }
+
+        return listaPublica;
+    }
+
+
+    public void cargarListadoFotos() {
+
+        final ArrayList<String> listaPublica = configurarListaPublicaFotografias();
+
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),
+                android.R.layout.simple_list_item_1, listaPublica.toArray(new String[listaPublica.size()]));
+
+
+        lstFotografiasOtrasIntervenciones.setAdapter(adapter);
+
+        /*Solo si se tienen estratigrafias se añade un listener*/
+        if (ficha.fichaTemporal.otras.getFotografias().size() > 0) {
+            lstFotografiasOtrasIntervenciones.setOnItemClickListener
+                    (new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> parent, View v,
+                                                int posicion, long id) {
+                            helper.mostrarMensaje("Tap sencillo", getContext());
+                        }
+                    });
+
+
+            lstFotografiasOtrasIntervenciones.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+                @Override
+                public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
+                                               final int pos, long id) {
+                    new AlertDialog.Builder(getActivity())
+                            //.setIcon(android.R.drawable.ic_dialog_alert)
+                            .setTitle("Eliminar fotografia")
+                            .setMessage("¿Esta seguro que desea eliminar la fotografia " + listaPublica.get(pos) + "?")
+                            .setPositiveButton("Si", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    helper.mostrarMensaje("Tap eliminar", getContext());
+                                }
+                            })
+                            .setNegativeButton("No", null)
+                            .show();
+                    return true;
+                }
+            });
+        }
+    }
+
+
+    public String saveImageFile(Bitmap bitmap) {
+        FileOutputStream out = null;
+        String filename = getFilename();
+        try {
+            out = new FileOutputStream(filename);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        return filename;
+    }
+
+    private String getFilename() {
+
+        File path = getContext().getExternalFilesDir(null);
+        File file = new File(path + "/Imagenes/", ficha.fichaTemporal.basica.getNumeroSitio() + "-" + ficha.fichaTemporal.basica.getCorte());
+
+        if (!file.exists()) {
+            file.mkdirs();
+        }
+
+        String uriSting = (file.getAbsolutePath() + "/"
+                + System.currentTimeMillis() + ".jpg");
+        return uriSting;
+    }
+
 
     /**
      * Carga informacion si existe previamente para su respectiva edicion
@@ -309,6 +450,9 @@ public class Tab_Otras_Intervenciones extends Fragment {
         if (helper.radioGroupIndiceRadioSeleccionado(rdgTrincheraOtrasIntervenciones, ficha.fichaTemporal.otras.isTrinchera()) != -1) {
             rdgTrincheraOtrasIntervenciones.check(helper.radioGroupIndiceRadioSeleccionado(rdgTrincheraOtrasIntervenciones, ficha.fichaTemporal.otras.isTrinchera()));
         }
+
+
+        cargarListadoFotos();
 
     }
 
