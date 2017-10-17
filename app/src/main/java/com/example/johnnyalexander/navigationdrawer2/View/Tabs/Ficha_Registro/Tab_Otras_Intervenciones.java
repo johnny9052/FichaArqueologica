@@ -1,49 +1,39 @@
 package com.example.johnnyalexander.navigationdrawer2.View.Tabs.Ficha_Registro;
 
-import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.MediaStore;
-import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.ImageSwitcher;
-import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.ViewSwitcher;
+import android.widget.Spinner;
 
 import com.example.johnnyalexander.navigationdrawer2.Controller.CtlFichasArqueologicas;
 import com.example.johnnyalexander.navigationdrawer2.Infraestructure.Helper;
 import com.example.johnnyalexander.navigationdrawer2.Infraestructure.Permisos;
-import com.example.johnnyalexander.navigationdrawer2.MainActivity;
-import com.example.johnnyalexander.navigationdrawer2.Model.ClsEstratigrafia;
 import com.example.johnnyalexander.navigationdrawer2.R;
+import com.example.johnnyalexander.navigationdrawer2.View.FragmentsDialog.Fragment_Dialog_Visor_Fotografia;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.util.ArrayList;
 
 import static android.app.Activity.RESULT_OK;
@@ -83,6 +73,8 @@ public class Tab_Otras_Intervenciones extends Fragment {
 
     ListView lstFotografiasOtrasIntervenciones;
 
+    LinearLayout lytTomarFoto;
+
     /*END Elementos GUI*/
 
 
@@ -114,6 +106,8 @@ public class Tab_Otras_Intervenciones extends Fragment {
     public void verificarDatos() {
         if (ficha.fichaTemporal.basica.getCorte() != "") {
             cargarDatos();
+        }else{
+            cargarListadoFotos();
         }
     }
 
@@ -192,6 +186,8 @@ public class Tab_Otras_Intervenciones extends Fragment {
         btnfGuardarOtrasIntervenciones = (FloatingActionButton) view.findViewById(R.id.btnfGuardarOtrasIntervenciones);
 
         lstFotografiasOtrasIntervenciones = (ListView) view.findViewById(R.id.lstFotografiasOtrasIntervenciones);
+
+        lytTomarFoto = (LinearLayout) view.findViewById(R.id.lytTomarFoto);
 
         /*END Referencias GUI*/
 
@@ -307,7 +303,7 @@ public class Tab_Otras_Intervenciones extends Fragment {
                 e.printStackTrace();
             }
 
-            btnTomarFotografia.requestFocus();
+            lytTomarFoto.requestFocus();
 
             cargarListadoFotos();
             /*Para obtener el Thump de la imagen, es decir en la minima calidad*/
@@ -347,6 +343,8 @@ public class Tab_Otras_Intervenciones extends Fragment {
 
         lstFotografiasOtrasIntervenciones.setAdapter(adapter);
 
+        lstFotografiasOtrasIntervenciones.setLayoutParams(new LinearLayout.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT, (listaPublica.size()+1)*90));
+
         /*Solo si se tienen estratigrafias se añade un listener*/
         if (ficha.fichaTemporal.otras.getFotografias().size() > 0) {
             lstFotografiasOtrasIntervenciones.setOnItemClickListener
@@ -354,7 +352,8 @@ public class Tab_Otras_Intervenciones extends Fragment {
                         @Override
                         public void onItemClick(AdapterView<?> parent, View v,
                                                 int posicion, long id) {
-                            helper.mostrarMensaje("Tap sencillo", getContext());
+                            //helper.mostrarMensaje("Tap sencillo", getContext());
+                            abrirDialog(v, ficha.fichaTemporal.otras.getFotografias().get(posicion));
                         }
                     });
 
@@ -370,7 +369,26 @@ public class Tab_Otras_Intervenciones extends Fragment {
                             .setPositiveButton("Si", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
-                                    helper.mostrarMensaje("Tap eliminar", getContext());
+
+                                    try {
+
+                                        if (helper.fotoEliminarPorRutaCompleta(ficha.fichaTemporal.otras.getFotografias().get(pos), getContext())) {
+                                            ficha.fichaTemporal.otras.getFotografias().remove(pos);
+                                            String json = helper.JSON_ObjetoToJSON(ficha.fichaTemporal);
+                                            String nombreArchivo = helper.nombreArchivo(ficha.fichaTemporal);
+
+                                            if (helper.ArchivoTextoCrear(json, nombreArchivo, getContext(), "json")) {
+                                                helper.mostrarMensaje("Eliminado correctamente", getContext());
+                                                cargarListadoFotos();
+                                            } else {
+                                                helper.mostrarMensaje("Error al almacenar la eliminacion, por favor refresque el formulario", getContext());
+                                            }
+                                        } else {
+                                            helper.mostrarMensaje("Error al borrar la fotografia", getContext());
+                                        }
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    }
                                 }
                             })
                             .setNegativeButton("No", null)
@@ -454,6 +472,33 @@ public class Tab_Otras_Intervenciones extends Fragment {
 
         cargarListadoFotos();
 
+    }
+
+
+    /**
+     * Abre un dialog para crear o editar un material
+     *
+     * @param view           Vista donde se abrira el dialog
+     * @param rutaFotografia ruta completa de la ubicacion de la fotografia que sera visualizada
+     */
+    public void abrirDialog(View view, String rutaFotografia) {
+
+        Fragment_Dialog_Visor_Fotografia newFragment;
+
+
+        newFragment = Fragment_Dialog_Visor_Fotografia.newInstance(rutaFotografia);
+
+
+        /*Con este se le asigna un listener, cuando se cierra el dialog fragment se ejecuta este bloque
+        * de codigo*/
+        newFragment.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                /*Nada que ejecutar por el momento*/
+            }
+        });
+
+        newFragment.show(getFragmentManager(), "dialog");
     }
 
 

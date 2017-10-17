@@ -135,7 +135,7 @@ public class Lista_Fichas extends Fragment {
             lstFichas.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
                 @Override
                 public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
-                                               int pos, long id) {
+                                               final int pos, long id) {
 
                     //helper.mostrarMensaje("Largo!!!", getContext());
                     final String archivo = listadoNombreArchivos[pos];
@@ -144,22 +144,29 @@ public class Lista_Fichas extends Fragment {
                     new AlertDialog.Builder(getActivity())
                             //.setIcon(android.R.drawable.ic_dialog_alert)
                             .setTitle("Eliminar ficha")
-                            .setMessage("¿Esta seguro que desea eliminar la ficha " + listaPublica.get(pos) +"?")
+                            .setMessage("¿Esta seguro que desea eliminar la ficha " + listaPublica.get(pos) + "?")
                             .setPositiveButton("Si", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
 
                                     try {
 
-                                        /*Se elimina la ficha*/
-                                        if (helper.archivoTextoEliminarPorNombre(archivo, "json", getContext())) {
-                                            helper.mostrarMensajeInferiorPantalla("Ficha eliminada", getView());
-                                            cargarListadoFichas();
+                                        /*Se elimina las fotos de la  ficha*/
+                                        if (helper.archivoCarpetaFotosEliminarPorNombre(
+                                                "Imagenes",
+                                                ficha.fichas.get(pos).basica.getNumeroSitio() + "-" +
+                                                        ficha.fichas.get(pos).basica.getCorte(),
+                                                getContext())) {
+                                            /*Se elimina la ficha*/
+                                            if (helper.archivoTextoEliminarPorNombre(archivo, "json", getContext())) {
+                                                helper.mostrarMensajeInferiorPantalla("Ficha eliminada", getView());
+                                                cargarListadoFichas();
+                                            } else {
+                                                helper.mostrarMensajeInferiorPantalla("La ficha no se pudo eliminar", getView());
+                                            }
                                         } else {
                                             helper.mostrarMensajeInferiorPantalla("La ficha no se pudo eliminar", getView());
                                         }
-
-
                                     } catch (IOException e) {
                                         e.printStackTrace();
                                     }

@@ -333,8 +333,6 @@ public class Helper extends Data {
     }
 
 
-
-
     /**
      * Elimina el archivo de texto almacenado en la carpeta Android/data
      *
@@ -350,6 +348,37 @@ public class Helper extends Data {
         File file = new File(path, nombreArchivo + "." + formato);
 
         return file.delete();
+    }
+
+
+    public boolean fotoEliminarPorRutaCompleta(String ruta, Context context) throws IOException {
+        File file = new File(ruta);
+        return file.delete();
+    }
+
+
+    /**
+     * Elimina la carpeta de todas las fotos de la ficha que s eeste eliminando
+     *
+     * @param carpeta     Nombre de la carpeta contenedora
+     * @param nombreFicha Nombre de la ficha que contiene todas las fotos
+     * @param context     Contexto que ejecuta la funcion
+     * @return True si elimino el archivo, false si no
+     * @throws IOException
+     */
+    public boolean archivoCarpetaFotosEliminarPorNombre(String carpeta, String nombreFicha, Context context) throws IOException {
+        /*Nos ubicamos en la carpeta Android/data */
+        File path = context.getExternalFilesDir(null);
+        /*Nos ubicamos en la carpeta Imagenes/numeroSitio-Corte */
+        File folder = new File(path, "/" + carpeta + "/" + nombreFicha);
+        /*Sacamos el listado de todas las fotos*/
+        File[] files = folder.listFiles();
+        /*Borramos foto por foto*/
+        for (int i = 0; i < files.length; i++) {
+            files[i].delete();
+        }
+        /*Ya con todas las fotos borradas podemos borrar la carpeta*/
+        return folder.delete();
     }
 
 

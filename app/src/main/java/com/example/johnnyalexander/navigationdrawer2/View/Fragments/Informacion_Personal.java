@@ -29,8 +29,8 @@ public class Informacion_Personal extends Fragment {
     /*END Referencia Objetos*/
 
     /*Referencias GUI*/
-    EditText txtNombres, txtApellidos, txtEmail, txtProyecto,txtMunicipio;
-    FloatingActionButton btnGuardar, btnReset;
+    EditText txtNombres, txtApellidos, txtEmail, txtProyecto, txtMunicipio;
+    FloatingActionButton btnGuardar;
     /*END Referencias GUI*/
 
     @Override
@@ -65,7 +65,6 @@ public class Informacion_Personal extends Fragment {
 
         /*Referencia botones*/
         btnGuardar = (FloatingActionButton) view.findViewById(R.id.btnfGuardarInfoPersonal);
-        btnReset = (FloatingActionButton) view.findViewById(R.id.btnfResetInfoPersonal);
         /*END Referencia botones*/
     }
 
@@ -82,15 +81,6 @@ public class Informacion_Personal extends Fragment {
             }
         });
 
-
-        btnReset.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(getContext(), MainActivity.class);
-                startActivity(i);
-                getActivity().finish();
-            }
-        });
         /*END Actions - Listener*/
     }
 
@@ -132,7 +122,7 @@ public class Informacion_Personal extends Fragment {
                 helper.editTextValidarObligatorioMensaje(txtMunicipio)) {
 
 
-            clsUsuario = new ClsUsuario(nombre, apellido, email, proyecto,municipio);
+            clsUsuario = new ClsUsuario(nombre, apellido, email, proyecto, municipio);
 
             persistencia = getActivity().getSharedPreferences("ClsUsuario", Context.MODE_PRIVATE);
 
@@ -144,7 +134,12 @@ public class Informacion_Personal extends Fragment {
             editor.putString("nombreProyecto", clsUsuario.getNombreProyecto());
             editor.putString("municipioProyecto", clsUsuario.getMunicipio());
 
-            helper.mostrarMensajeInferiorPantalla("Guardado con exito", view);
+            helper.mostrarMensaje("Informacion guardada con exito", getContext());
+
+            Intent i = new Intent(getContext(), MainActivity.class);
+            i.putExtra("fragment", "informacionPersonal");
+            startActivity(i);
+            getActivity().finish();
 
             editor.commit();
         } else {
