@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 
+import com.example.johnnyalexander.navigationdrawer2.Infraestructure.Excel;
 import com.example.johnnyalexander.navigationdrawer2.Infraestructure.Helper;
 import com.example.johnnyalexander.navigationdrawer2.MainActivity;
 import com.example.johnnyalexander.navigationdrawer2.Model.ClsUsuario;
@@ -77,7 +78,13 @@ public class Informacion_Personal extends Fragment {
         btnGuardar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                guardarDatos(v);
+                //guardarDatos(v);
+                Excel excel = new Excel();
+                if(excel.crearArchivo(getContext())){
+                    helper.mostrarMensaje("exito",getContext());
+                }else{
+                    helper.mostrarMensaje("pailas",getContext());
+                }
             }
         });
 
