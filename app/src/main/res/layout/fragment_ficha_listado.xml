@@ -41,4 +41,12 @@
 
     </LinearLayout>
 
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/btnfGenerarExcel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="10dp"
+        android:src="@mipmap/ic_cloud_upload_white_48dp" />
+
 </FrameLayout>

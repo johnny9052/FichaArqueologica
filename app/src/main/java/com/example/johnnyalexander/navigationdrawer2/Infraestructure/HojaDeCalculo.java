@@ -6,6 +6,7 @@ import android.content.Context;
 import java.io.File;
 import java.io.IOException;
 
+import jxl.CellView;
 import jxl.Workbook;
 import jxl.write.Label;
 import jxl.write.Number;
@@ -64,36 +65,11 @@ public class HojaDeCalculo {
      * @throws IOException
      */
     public boolean crearArchivo(String nombreArchivo) throws IOException {
-        EXCEL_FILE_LOCATION = context.getExternalFilesDir(null).toString() + "/HojasDeCalculo/" + nombreArchivo;
+        EXCEL_FILE_LOCATION = context.getExternalFilesDir(null).toString() + "/HojasDeCalculo/" + nombreArchivo + ".xls";
         myFirstWbook = Workbook.createWorkbook(new File(EXCEL_FILE_LOCATION));
         return true;
     }
 
-
-    /**
-     * Cierra el archivo, almacenando todos los cambios sobre el.
-     *
-     * @return true si puede escribir todo sobre el archivo
-     * @throws IOException
-     */
-    public boolean cerrarArchivo() throws IOException {
-        myFirstWbook.write();
-
-        if (myFirstWbook != null) {
-            try {
-                myFirstWbook.close();
-                return true;
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (WriteException e) {
-                e.printStackTrace();
-            }
-        } else {
-            return false;
-        }
-
-        return false;
-    }
 
     /**
      * Agrega una pestaña a la hoja de excel.
@@ -101,9 +77,44 @@ public class HojaDeCalculo {
      * @param nombre nombre de la pestaña a crear
      * @param pos    posicion donde se creara la pestaña
      */
-    public void agregarPestaña(String nombre, int pos) {
+    public void agregarPestania(String nombre, int pos) {
         excelSheet = myFirstWbook.createSheet(nombre, pos);
     }
+
+    public void seleccionarPestania(int pos) {
+        excelSheet = myFirstWbook.getSheet(pos);
+
+    }
+
+
+    /**
+     * Agrega un texto a una celda de excel
+     *
+     * @param columna columna donde se agregara
+     * @param fila    fila donde se agregara
+     * @param texto   texto añadir
+     * @param formato estilos a aplicar en la celda
+     * @throws WriteException
+     */
+    public void agregarColumna(int columna, int fila, String texto, WritableCellFormat formato) throws WriteException {
+
+        Label label;
+
+        if (formato == null) {
+            label = new Label(columna, fila, texto);
+        } else {
+            label = new Label(columna, fila, texto, formato);
+        }
+
+        excelSheet.addCell(label);
+
+        /*Se ajusta el tamaño*/
+        CellView cell = excelSheet.getColumnView(columna);
+        cell.setAutosize(true);
+        excelSheet.setColumnView(columna, cell);
+    }
+
+
 
 
     /**
@@ -126,7 +137,10 @@ public class HojaDeCalculo {
         }
 
         excelSheet.addCell(label);
+
+
     }
+
 
     /**
      * Agrega un texto a una celda de excel
@@ -164,30 +178,52 @@ public class HojaDeCalculo {
     }
 
 
+    /**
+     * Cierra el archivo, almacenando todos los cambios sobre el.
+     *
+     * @return true si puede escribir todo sobre el archivo
+     * @throws IOException
+     */
+    public boolean cerrarArchivo() throws IOException {
+        myFirstWbook.write();
+
+        if (myFirstWbook != null) {
+            try {
+                myFirstWbook.close();
+                return true;
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (WriteException e) {
+                e.printStackTrace();
+            }
+        } else {
+            return false;
+        }
+
+        return false;
+    }
+
+
     public boolean crearArchivoPrueba() {
 
+        EXCEL_FILE_LOCATION = context.getExternalFilesDir(null).toString() + "/HojasDeCalculo/prueba.xls";
+
+        myFirstWbook = null;
         try {
 
             myFirstWbook = Workbook.createWorkbook(new File(EXCEL_FILE_LOCATION));
 
-            // Se crea una pestaña llamada Sheet 1
-            excelSheet = myFirstWbook.createSheet("Sheet 1", 0);
+            // create an Excel sheet
+            WritableSheet excelSheet = myFirstWbook.createSheet("Sheet 1", 0);
 
-            /*Definimos un estilo para añadirlo a libertad en cada uno de los textos*/
-            WritableCellFormat cFormat = new WritableCellFormat();
-            WritableFont font = new WritableFont(WritableFont.ARIAL, 16, WritableFont.BOLD);
-            cFormat.setFont(font);
-            /**/
-
-            // Añadimos un texto en el excel (Columna, fila, texto)
+            // add something into the Excel sheet
             Label label = new Label(0, 0, "Test Count");
             excelSheet.addCell(label);
 
-            // Añadimos un numero en el excel (Columna, fila, numero)
             Number number = new Number(0, 1, 1);
             excelSheet.addCell(number);
 
-            label = new Label(1, 0, "Result", cFormat);
+            label = new Label(1, 0, "Result");
             excelSheet.addCell(label);
 
             label = new Label(1, 1, "Passed");
@@ -217,14 +253,12 @@ public class HojaDeCalculo {
                 } catch (WriteException e) {
                     e.printStackTrace();
                 }
-            } else {
-                return false;
             }
 
-
         }
-
         return false;
     }
+
+
 
 }

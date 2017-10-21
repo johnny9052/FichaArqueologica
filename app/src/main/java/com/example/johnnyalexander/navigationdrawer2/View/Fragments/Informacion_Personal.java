@@ -17,6 +17,10 @@ import com.example.johnnyalexander.navigationdrawer2.MainActivity;
 import com.example.johnnyalexander.navigationdrawer2.Model.ClsUsuario;
 import com.example.johnnyalexander.navigationdrawer2.R;
 
+import java.io.IOException;
+
+import jxl.write.WriteException;
+
 
 public class Informacion_Personal extends Fragment {
 
@@ -78,13 +82,7 @@ public class Informacion_Personal extends Fragment {
         btnGuardar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //guardarDatos(v);
-                HojaDeCalculo hojaDeCalculo = new HojaDeCalculo(getContext());
-                if (hojaDeCalculo.crearArchivoPrueba()) {
-                    helper.mostrarMensaje("exito", getContext());
-                } else {
-                    helper.mostrarMensaje("pailas", getContext());
-                }
+                guardarDatos(v);
             }
         });
 

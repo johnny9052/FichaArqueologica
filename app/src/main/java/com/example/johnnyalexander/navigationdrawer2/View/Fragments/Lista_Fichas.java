@@ -3,7 +3,10 @@ package com.example.johnnyalexander.navigationdrawer2.View.Fragments;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -17,12 +20,15 @@ import android.widget.ListView;
 
 import com.example.johnnyalexander.navigationdrawer2.Controller.CtlFichasArqueologicas;
 import com.example.johnnyalexander.navigationdrawer2.Infraestructure.Helper;
+import com.example.johnnyalexander.navigationdrawer2.Infraestructure.HojaDeCalculo;
 import com.example.johnnyalexander.navigationdrawer2.MainActivity;
 import com.example.johnnyalexander.navigationdrawer2.R;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+
+import jxl.write.WriteException;
 
 
 public class Lista_Fichas extends Fragment {
@@ -31,6 +37,7 @@ public class Lista_Fichas extends Fragment {
     CtlFichasArqueologicas ficha;
 
     private ListView lstFichas;
+    FloatingActionButton btnfGenerarExcel;
 
     private String[] listadoNombreArchivos;
 
@@ -38,11 +45,115 @@ public class Lista_Fichas extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_ficha_listado, container, false);
-        lstFichas = (ListView) view.findViewById(R.id.lstFichas);
         helper = new Helper();
         ficha = new CtlFichasArqueologicas();
+        configuracionGUI(view);
+        configuracionListeners();
         cargarListadoFichas();
         return view;
+    }
+
+    public void configuracionGUI(View view) {
+        /*Referencia botones*/
+        lstFichas = (ListView) view.findViewById(R.id.lstFichas);
+        btnfGenerarExcel = (FloatingActionButton) view.findViewById(R.id.btnfGenerarExcel);
+        /*END Referencia botones*/
+    }
+
+
+    public void configuracionListeners() {
+/*Actions - Listener*/
+        btnfGenerarExcel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                try {
+
+                    String nombreArchivo = System.currentTimeMillis() + "";
+                    HojaDeCalculo hojaDeCalculo = new HojaDeCalculo(getContext());
+                    hojaDeCalculo.crearArchivo(nombreArchivo);
+
+                    hojaDeCalculo.agregarPestania("Informacion basica", 0);
+                    hojaDeCalculo.agregarColumna(0, 0, "Profesional a cargo", hojaDeCalculo.getEstiloCabecera());
+                    hojaDeCalculo.agregarColumna(1, 0, "Sitio", hojaDeCalculo.getEstiloCabecera());
+                    hojaDeCalculo.agregarColumna(2, 0, "Corte", hojaDeCalculo.getEstiloCabecera());
+                    hojaDeCalculo.agregarColumna(3, 0, "Predio", hojaDeCalculo.getEstiloCabecera());
+                    hojaDeCalculo.agregarColumna(4, 0, "Vereda", hojaDeCalculo.getEstiloCabecera());
+                    hojaDeCalculo.agregarColumna(5, 0, "Municipio", hojaDeCalculo.getEstiloCabecera());
+
+                    hojaDeCalculo.agregarPestania("Estratigrafia", 1);
+                    hojaDeCalculo.agregarPestania("Material recuperado", 2);
+
+                    hojaDeCalculo.agregarPestania("Otras intervenciones", 3);
+                    hojaDeCalculo.agregarColumna(0, 0, "Ampliaciones", hojaDeCalculo.getEstiloCabecera());
+                    hojaDeCalculo.agregarColumna(1, 0, "Numero ampliaciones", hojaDeCalculo.getEstiloCabecera());
+                    hojaDeCalculo.agregarColumna(2, 0, "Descripcion", hojaDeCalculo.getEstiloCabecera());
+                    hojaDeCalculo.agregarColumna(3, 0, "Ubicacion superior", hojaDeCalculo.getEstiloCabecera());
+                    hojaDeCalculo.agregarColumna(4, 0, "Ubicacion inferior", hojaDeCalculo.getEstiloCabecera());
+                    hojaDeCalculo.agregarColumna(5, 0, "Ubicacion izquierdo", hojaDeCalculo.getEstiloCabecera());
+                    hojaDeCalculo.agregarColumna(6, 0, "Ubicacion derecho", hojaDeCalculo.getEstiloCabecera());
+                    hojaDeCalculo.agregarColumna(7, 0, "Fecha inicio", hojaDeCalculo.getEstiloCabecera());
+                    hojaDeCalculo.agregarColumna(8, 0, "Fecha fin", hojaDeCalculo.getEstiloCabecera());
+
+
+                    for (int i = 0; i < ficha.fichas.size(); i++) {
+                        hojaDeCalculo.seleccionarPestania(0);
+                        hojaDeCalculo.agregarTexto(0, i + 1, ficha.fichas.get(i).basica.getNombreProfesional(), null);
+                        hojaDeCalculo.agregarNumero(1, i + 1, ficha.fichas.get(i).basica.getNumeroSitio(), null);
+                        hojaDeCalculo.agregarTexto(2, i + 1, ficha.fichas.get(i).basica.getCorte(), null);
+                        hojaDeCalculo.agregarTexto(3, i + 1, ficha.fichas.get(i).basica.getPredio(), null);
+                        hojaDeCalculo.agregarTexto(4, i + 1, ficha.fichas.get(i).basica.getVereda(), null);
+                        hojaDeCalculo.agregarTexto(5, i + 1, ficha.fichas.get(i).basica.getMunicipio(), null);
+                        hojaDeCalculo.seleccionarPestania(3);
+                        hojaDeCalculo.agregarTexto(0, i + 1, ficha.fichas.get(i).otras.getAmpliaciones(), null);
+                        hojaDeCalculo.agregarNumero(1, i + 1, ficha.fichas.get(i).otras.getNumeroApliaciones(), null);
+                        hojaDeCalculo.agregarTexto(2, i + 1, ficha.fichas.get(i).otras.getAmpliacionesDescripcionGeneral(), null);
+                        hojaDeCalculo.agregarTexto(3, i + 1, ficha.fichas.get(i).otras.getSuperior() + "", null);
+                        hojaDeCalculo.agregarTexto(4, i + 1, ficha.fichas.get(i).otras.getInferior() + "", null);
+                        hojaDeCalculo.agregarTexto(5, i + 1, ficha.fichas.get(i).otras.getIzquierda() + "", null);
+                        hojaDeCalculo.agregarTexto(6, i + 1, ficha.fichas.get(i).otras.getDerecha() + "", null);
+                        hojaDeCalculo.agregarTexto(7, i + 1, ficha.fichas.get(i).otras.getFechaInicio(), null);
+                        hojaDeCalculo.agregarTexto(8, i + 1, ficha.fichas.get(i).otras.getFechaFin(), null);
+                    }
+
+
+                    hojaDeCalculo.cerrarArchivo();
+
+
+                    String filename = nombreArchivo;
+
+                    /*MANDAR MULTIPLES ARCHIVOS ADJUNTOS
+                    * https://stackoverflow.com/questions/9466169/how-to-attach-files-with-sending-mail-in-android-application*/
+
+                    File filelocation = new File(getContext().getExternalFilesDir(null).toString() + "/HojasDeCalculo/", nombreArchivo+".xls");
+                    Uri path = Uri.fromFile(filelocation);
+                    Intent emailIntent = new Intent(Intent.ACTION_SEND);
+                    // set the type to 'email'
+                    emailIntent.setType("vnd.android.cursor.dir/email");
+                    String to[] = {"alexander9052@gmail.com"};
+                    emailIntent.putExtra(Intent.EXTRA_EMAIL, to);
+                    // the attachment
+                    emailIntent.putExtra(Intent.EXTRA_STREAM, path);
+                    // the mail subject
+                    emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Subject");
+                    emailIntent.putExtra(Intent.EXTRA_TEXT,"body goes here");
+                    startActivity(Intent.createChooser(emailIntent, "Send email..."));
+
+
+                    helper.mostrarMensaje("exito", getContext());
+
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    helper.mostrarMensaje("pailas", getContext());
+                } catch (WriteException e) {
+                    e.printStackTrace();
+                    helper.mostrarMensaje("pailas", getContext());
+                }
+            }
+        });
+
+        /*END Actions - Listener*/
     }
 
     /**

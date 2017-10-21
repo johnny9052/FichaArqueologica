@@ -54,7 +54,7 @@ public class ClsOtraIntervencion {
 
     }
 
-    public String isAmpliaciones() {
+    public String getAmpliaciones() {
         return ampliaciones;
     }
 
@@ -70,7 +70,7 @@ public class ClsOtraIntervencion {
         this.numeroApliaciones = numeroApliaciones;
     }
 
-    public boolean isSuperior() {
+    public boolean getSuperior() {
         return superior;
     }
 
@@ -78,7 +78,7 @@ public class ClsOtraIntervencion {
         this.superior = superior;
     }
 
-    public boolean isInferior() {
+    public boolean getInferior() {
         return inferior;
     }
 
@@ -86,7 +86,7 @@ public class ClsOtraIntervencion {
         this.inferior = inferior;
     }
 
-    public boolean isDerecha() {
+    public boolean getDerecha() {
         return derecha;
     }
 
@@ -94,7 +94,7 @@ public class ClsOtraIntervencion {
         this.derecha = derecha;
     }
 
-    public boolean isIzquierda() {
+    public boolean getIzquierda() {
         return izquierda;
     }
 
@@ -110,7 +110,7 @@ public class ClsOtraIntervencion {
         this.ampliacionesDescripcionGeneral = ampliacionesDescripcionGeneral;
     }
 
-    public String isCorteArea() {
+    public String getCorteArea() {
         return corteArea;
     }
 
@@ -134,7 +134,7 @@ public class ClsOtraIntervencion {
         this.corteAreaDescripcionGeneral = corteAreaDescripcionGeneral;
     }
 
-    public String isTrinchera() {
+    public String getTrinchera() {
         return trinchera;
     }
 

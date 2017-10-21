@@ -452,21 +452,21 @@ public class Tab_Otras_Intervenciones extends Fragment {
         txtTotalDibujosOtrasIntervenciones.setText(helper.numeroValidarCargaObligatorio(ficha.fichaTemporal.otras.getTotalDibujos()));
         txtTotalOtrosOtrasIntervenciones.setText(helper.numeroValidarCargaObligatorio(ficha.fichaTemporal.otras.getOtros()));
 
-        chkSuperiorOtrasIntervenciones.setChecked(ficha.fichaTemporal.otras.isSuperior());
-        chkInferiorOtrasIntervenciones.setChecked(ficha.fichaTemporal.otras.isInferior());
-        chkDerechaOtrasIntervenciones.setChecked(ficha.fichaTemporal.otras.isDerecha());
-        chkIzquierdaOtrasIntervenciones.setChecked(ficha.fichaTemporal.otras.isIzquierda());
+        chkSuperiorOtrasIntervenciones.setChecked(ficha.fichaTemporal.otras.getSuperior());
+        chkInferiorOtrasIntervenciones.setChecked(ficha.fichaTemporal.otras.getInferior());
+        chkDerechaOtrasIntervenciones.setChecked(ficha.fichaTemporal.otras.getDerecha());
+        chkIzquierdaOtrasIntervenciones.setChecked(ficha.fichaTemporal.otras.getIzquierda());
 
-        if (helper.radioGroupIndiceRadioSeleccionado(rdgApliacionOtrasIntervenciones, ficha.fichaTemporal.otras.isAmpliaciones()) != -1) {
-            rdgApliacionOtrasIntervenciones.check(helper.radioGroupIndiceRadioSeleccionado(rdgApliacionOtrasIntervenciones, ficha.fichaTemporal.otras.isAmpliaciones()));
+        if (helper.radioGroupIndiceRadioSeleccionado(rdgApliacionOtrasIntervenciones, ficha.fichaTemporal.otras.getAmpliaciones()) != -1) {
+            rdgApliacionOtrasIntervenciones.check(helper.radioGroupIndiceRadioSeleccionado(rdgApliacionOtrasIntervenciones, ficha.fichaTemporal.otras.getAmpliaciones()));
         }
 
-        if (helper.radioGroupIndiceRadioSeleccionado(rdgCorteAreaOtrasIntervenciones, ficha.fichaTemporal.otras.isCorteArea()) != -1) {
-            rdgCorteAreaOtrasIntervenciones.check(helper.radioGroupIndiceRadioSeleccionado(rdgCorteAreaOtrasIntervenciones, ficha.fichaTemporal.otras.isCorteArea()));
+        if (helper.radioGroupIndiceRadioSeleccionado(rdgCorteAreaOtrasIntervenciones, ficha.fichaTemporal.otras.getCorteArea()) != -1) {
+            rdgCorteAreaOtrasIntervenciones.check(helper.radioGroupIndiceRadioSeleccionado(rdgCorteAreaOtrasIntervenciones, ficha.fichaTemporal.otras.getCorteArea()));
         }
 
-        if (helper.radioGroupIndiceRadioSeleccionado(rdgTrincheraOtrasIntervenciones, ficha.fichaTemporal.otras.isTrinchera()) != -1) {
-            rdgTrincheraOtrasIntervenciones.check(helper.radioGroupIndiceRadioSeleccionado(rdgTrincheraOtrasIntervenciones, ficha.fichaTemporal.otras.isTrinchera()));
+        if (helper.radioGroupIndiceRadioSeleccionado(rdgTrincheraOtrasIntervenciones, ficha.fichaTemporal.otras.getTrinchera()) != -1) {
+            rdgTrincheraOtrasIntervenciones.check(helper.radioGroupIndiceRadioSeleccionado(rdgTrincheraOtrasIntervenciones, ficha.fichaTemporal.otras.getTrinchera()));
         }
 
 
